@@ -10,12 +10,12 @@ public abstract class ICard : MonoBehaviour
     ECardType cardtype;
     GameObject _3Dmodel;
     bool revealed;
-    event OnSummoned;
-    event OnToGraveyard;
-    event OnToHand;
-    event OnReveal;
-    event OnAttack;
-    event OnDefend;
+    //event OnSummoned; Commented out so it can still be playable.
+    //event OnToGraveyard;
+    //event OnToHand;
+    //event OnReveal;
+    //event OnAttack;
+    //event OnDefend;
 
 
     // Use this for initialization

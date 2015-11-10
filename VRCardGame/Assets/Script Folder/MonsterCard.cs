@@ -1,23 +1,37 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
-namespace Cards
+class MonsterCard : MonoBehaviour
 {
-	class MonsterCard
-	{
 
-		public void SetAttackMode()
-		{
-			//Console.WriteLine ("Hello World!");
-		}
-		public void SetDefenceMode()
-		{
+    public int attack;
+    public int defense;
+    public int rating;
+    ECardType monsterType;
+    bool attackMode;
 
 
-		}
-		public int attack;
-		public int defence;
-		public int rating;
-		EMonsterType monsterType;
-		bool attackMode;
-	}
+    public void SetAttackMode()
+    {
+        //Console.WriteLine ("Hello World!");
+    }
+    public void SetDefenseMode()
+    {
+
+
+    }
+
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
 }

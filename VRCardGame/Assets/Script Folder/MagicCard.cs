@@ -1,10 +1,22 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
-namespace Cards
+public class MagicCard : MonoBehaviour
 {
-	public class MagicCard
-	{
-		event OnActivate();
-	}
-}
+    //event OnActivate;
 
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+
+}

@@ -3,10 +3,10 @@ using System.Collections;
 
 public abstract class IEffectCard : MonoBehaviour
 {
-    event OnActivate();
-    public bool CanActivate()
+    //event OnActivate(); Commented out so that it is playable.
+    bool CanActivate()
     {
-
+        return true; //Placeholder
     }
 
     // Use this for initialization

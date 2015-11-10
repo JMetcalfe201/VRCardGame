@@ -1,11 +1,22 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
-namespace Cards
+public class TrapCard : MonoBehaviour
 {
-	public class TrapCard
-	{
-		event OnActivate();
+    //event OnActivate;
 
-	}
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+
 }
-
