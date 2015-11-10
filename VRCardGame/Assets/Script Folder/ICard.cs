@@ -35,5 +35,7 @@ public abstract class ICard : MonoBehaviour
 
 enum ECardType
 {
-
+    MONSTER_CARD = 1,
+    MAGIC_CARD = 2,
+    TRAP_CARD = 3
 };

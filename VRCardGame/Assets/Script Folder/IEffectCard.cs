@@ -1,13 +1,26 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
-namespace Cards
+public abstract class IEffectCard : MonoBehaviour
 {
-	abstract class IEffectCard
-	{
-		event OnActivate();
-		public bool CanActivate()
-		{
+    event OnActivate();
+    public bool CanActivate()
+    {
 
-		}
-	}
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+
+
 }
