@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections;
 
+using PlayingFieldClass;
+using DeckClass;
+
 public class Player : NetworkBehaviour
 {
     [SyncVar]
@@ -14,6 +17,8 @@ public class Player : NetworkBehaviour
 
     public Vector2 cursorPosition;
     public GameplayManager gpManager;
+
+    public PlayingField field;
 
     public Text playerText;
 
@@ -36,6 +41,16 @@ public class Player : NetworkBehaviour
             playerText = GameObject.Find("PlayerText").GetComponent<Text>();
             playerText.text = "You are player: " + (isFirstPlayer ? 1 : 2);
         }
+
+        // Create a deck to test out just for now
+        Deck testDeck = new Deck();
+        for(int i=1;i<10;i++)
+        {
+            CardTestType newcard = new CardTestType(i);
+            testDeck.addCardTop(newcard);
+        }
+        field = new PlayingField(testDeck);
+        field.getDeck().print();
 	}
 	
 	// Update is called once per frame
@@ -70,6 +85,48 @@ public class Player : NetworkBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleNetworkGUI();
+        }
+
+        // testing deck functionality
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CardTestType newcard = new CardTestType(Random.Range(1, 60));
+            field.getDeck().addCardTop(newcard);
+            field.getDeck().print();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CardTestType newcard = new CardTestType(Random.Range(1, 60));
+            field.getDeck().addCardBottom(newcard);
+            field.getDeck().print();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CardTestType drawnCard = field.getDeck().DrawTop();
+            Debug.Log("Drew: " + drawnCard.getid());
+            field.getDeck().print();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CardTestType drawnCard = field.getDeck().DrawBottom();
+            Debug.Log("Drew: " + drawnCard.getid());
+            field.getDeck().print();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            field.getDeck().Shuffle();
+            Debug.Log("Shuffled deck");
+            field.getDeck().print();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            field.setMonsterCardByIndex(field.getDeck().DrawTop(), 0);
+            field.print();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            field.setEffectCardByIndex(field.getDeck().DrawTop(), 1);
+            field.print();
         }
     }
 
