@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MagicCard : MonoBehaviour
+public class MagicCard : IEffectCard
 {
     //event OnActivate;
-
 
     // Use this for initialization
     void Start()
@@ -17,6 +16,5 @@ public class MagicCard : MonoBehaviour
     {
 
     }
-
 
 }

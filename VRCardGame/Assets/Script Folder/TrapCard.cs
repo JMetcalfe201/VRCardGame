@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrapCard : MonoBehaviour
+public class TrapCard : IEffectCard
 {
     //event OnActivate;
 

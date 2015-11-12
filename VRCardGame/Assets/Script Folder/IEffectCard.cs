@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class IEffectCard : MonoBehaviour
+public abstract class IEffectCard : ICard
 {
     //event OnActivate(); Commented out so that it is playable.
     bool CanActivate()
