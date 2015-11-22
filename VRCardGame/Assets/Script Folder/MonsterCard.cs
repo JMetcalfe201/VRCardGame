@@ -7,7 +7,9 @@ class MonsterCard : ICard
     public int attack;
     public int defense;
     public int rating;
+    [SerializeField]
     ECardType monsterType;
+    [SerializeField]
     bool attackMode;
 
 
