@@ -4,9 +4,11 @@ using System.Collections;
 public abstract class ICard : MonoBehaviour
 {
 
-
+    [SerializeField]
     string name;
+    [SerializeField]
     string description;
+    [SerializeField]
     ECardType cardtype;
     [SerializeField]
     GameObject _3Dmodel;
