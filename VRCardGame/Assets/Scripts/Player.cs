@@ -21,37 +21,30 @@ public class Player : NetworkBehaviour
     public PlayingField field;
 
     public Text playerText;
+    public Text phaseText;
 
-	// Use this for initialization
-	void Start ()
+    void Awake()
     {
-	    if(!isLocalPlayer)
+        gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
+    }
+
+    void Start()
+    {
+        if (!isLocalPlayer)
         {
             GetComponent<AudioListener>().enabled = false;
             GetComponent<Camera>().tag = "Untagged";
             GetComponent<Camera>().enabled = false;
         }
 
-        gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
-
         isFirstPlayer = (NetworkManager.singleton.numPlayers == 1);
 
         if (isLocalPlayer)
         {
-            playerText = GameObject.Find("PlayerText").GetComponent<Text>();
             playerText.text = "You are player: " + (isFirstPlayer ? 1 : 2);
+            UpdateUI();
         }
-
-        // Create a deck to test out just for now
-        Deck testDeck = new Deck();
-        for(int i=1;i<10;i++)
-        {
-            CardTestType newcard = new CardTestType(i);
-            testDeck.addCardTop(newcard);
-        }
-        field = new PlayingField(testDeck);
-        field.getDeck().print();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -74,17 +67,11 @@ public class Player : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+
             if ((gpManager.isPlayerOnesTurn() && isFirstPlayer) || (!gpManager.isPlayerOnesTurn() && !isFirstPlayer))
             {
-                Debug.Log("Turn: " + gpManager.isPlayerOnesTurn() + "Player: " + isFirstPlayer);
-
                 CmdgpManagerAdvancePhase();
             }
-        }
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleNetworkGUI();
         }
 
         // testing deck functionality
@@ -130,16 +117,18 @@ public class Player : NetworkBehaviour
         }
     }
 
+    public void UpdateUI()
+    {
+        if (isLocalPlayer)
+        {
+            phaseText.text = "It is player " + (gpManager.GetFirstPlayerTurn() ? 1 : 2) + "'s turn. Phase: " + gpManager.GetCurrentPhase().ToString();
+        }
+    }
+
     [Command]
     private void CmdgpManagerAdvancePhase()
     {
         gpManager.AdvancePhase();
-    }
-
-    private void ToggleNetworkGUI()
-    {
-        NetworkManagerHUD hud = NetworkManager.singleton.GetComponent<NetworkManagerHUD>();
-        hud.showGUI = !hud.showGUI;
     }
 
     public void ChangeLifePoints(int points)

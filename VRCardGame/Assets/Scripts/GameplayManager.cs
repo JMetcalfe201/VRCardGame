@@ -15,22 +15,16 @@ public enum EGamePhase
 public class GameplayManager : NetworkBehaviour
 {
     [SyncVar(hook = "OnCurrentPhaseChange")]
-    public EGamePhase currentPhase;
+    private EGamePhase currentPhase;
 
     [SyncVar(hook = "OnFirstPlayersTurnChange")]
     private bool firstPlayersTurn;
-
-    public Text phaseText;
 
     // Use this for initialization
     void Start()
     {
         currentPhase = EGamePhase.DrawPhase;
         firstPlayersTurn = true;
-
-        phaseText.text = "It is player " + (firstPlayersTurn ? 1 : 2) + "'s turn. Phase: " + currentPhase.ToString();
-
-        NetworkManager.singleton.GetComponent<NetworkManagerHUD>().showGUI = false;
 	}
 	
 	// Update is called once per frame
@@ -59,18 +53,27 @@ public class GameplayManager : NetworkBehaviour
     private void OnCurrentPhaseChange(EGamePhase newPhase)
     {
         currentPhase = newPhase;
-        UpdateUI();
+
+        foreach(Player p in GameObject.FindObjectsOfType<Player>())
+        {
+            if(p.isLocalPlayer)
+            {
+                p.UpdateUI();
+            }
+        }
     }
 
     private void OnFirstPlayersTurnChange(bool newTurn)
     {
         firstPlayersTurn = newTurn;
-        UpdateUI();
-    }
 
-    private void UpdateUI()
-    {
-        phaseText.text = "It is player " + (firstPlayersTurn ? 1 : 2) + "'s turn. Phase: " + currentPhase.ToString();
+        foreach (Player p in GameObject.FindObjectsOfType<Player>())
+        {
+            if (p.isLocalPlayer)
+            {
+                p.UpdateUI();
+            }
+        }
     }
 
     public EGamePhase GetCurrentPhase()
@@ -81,5 +84,15 @@ public class GameplayManager : NetworkBehaviour
     public bool isPlayerOnesTurn()
     {
         return firstPlayersTurn;
+    }
+
+    public bool GetFirstPlayerTurn()
+    {
+        return firstPlayersTurn;
+    }
+
+    public EGamePhase GetPhase()
+    {
+        return currentPhase;
     }
 }
