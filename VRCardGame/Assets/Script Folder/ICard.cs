@@ -4,10 +4,13 @@ using System.Collections;
 public abstract class ICard : MonoBehaviour
 {
 
-
+    [SerializeField]
     string name;
+    [SerializeField]
     string description;
+    [SerializeField]
     ECardType cardtype;
+    [SerializeField]
     GameObject _3Dmodel;
     bool revealed;
     //event OnSummoned; Commented out so it can still be playable.
