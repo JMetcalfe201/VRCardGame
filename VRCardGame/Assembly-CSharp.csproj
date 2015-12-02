@@ -50,6 +50,7 @@
      <Compile Include="Assets\Script Folder\MagicCard.cs" />
      <Compile Include="Assets\Script Folder\MonsterCard.cs" />
      <Compile Include="Assets\Script Folder\TrapCard.cs" />
+     <Compile Include="Assets\Scripts\CardDictionary.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
      <Compile Include="Assets\Scripts\GameplayManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuNonVRCorrection.cs" />
