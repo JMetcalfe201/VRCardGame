@@ -20,6 +20,17 @@ public class GameplayManager : NetworkBehaviour
     [SyncVar(hook = "OnFirstPlayersTurnChange")]
     private bool firstPlayersTurn;
 
+    [SyncVar]
+    public int player1;
+    [SyncVar]
+    public int player2;
+
+    void Awake()
+    {
+        player1 = -1;
+        player2 = -1;
+    }
+
     // Use this for initialization
     void Start()
     {

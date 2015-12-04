@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-class MonsterCard : ICard
+public class MonsterCard : ICard
 {
 
     public int attack;

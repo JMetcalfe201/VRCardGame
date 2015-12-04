@@ -4,28 +4,28 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections;
 
-using PlayingFieldClass;
-using DeckClass;
-
 public class Player : NetworkBehaviour
 {
     [SyncVar]
     private int lifepoints;
 
-    [SyncVar]
-    private bool isFirstPlayer;
+    [SyncVar(hook = "firstPlayerUpdated")]
+    public int playerNumber;
 
     public Vector2 cursorPosition;
+    
     public GameplayManager gpManager;
 
-    public PlayingField field;
+    private PlayingFieldOneSlot field;
 
     public Text playerText;
     public Text phaseText;
 
     void Awake()
     {
+        playerNumber = -1;
         gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
+        field = GetComponent<PlayingFieldOneSlot>();
     }
 
     void Start()
@@ -35,14 +35,31 @@ public class Player : NetworkBehaviour
             GetComponent<AudioListener>().enabled = false;
             GetComponent<Camera>().tag = "Untagged";
             GetComponent<Camera>().enabled = false;
+
+            UpdatePlayerNumInfo();
         }
-
-        isFirstPlayer = (NetworkManager.singleton.numPlayers == 1);
-
-        if (isLocalPlayer)
+        else
         {
-            playerText.text = "You are player: " + (isFirstPlayer ? 1 : 2);
+            CmdInitPlayer();
             UpdateUI();
+        }
+    }
+
+    [Command]
+    private void CmdInitPlayer()
+    {
+        if (hasAuthority)
+        {
+            if(gpManager.player1 == -1)
+            {
+                gpManager.player1 = (int)netId.Value;
+                playerNumber = 1;
+            }
+            else
+            {
+                gpManager.player2 = (int)netId.Value;
+                playerNumber = 2;
+            }
         }
     }
 	
@@ -57,6 +74,7 @@ public class Player : NetworkBehaviour
 
     private void HandleInput()
     {
+        /*
         if (!VRSettings.enabled)
         {
             float lookSensitivity = 5.0f;
@@ -64,56 +82,31 @@ public class Player : NetworkBehaviour
             transform.eulerAngles = transform.eulerAngles + new Vector3(0f, Input.GetAxis("Mouse X") * lookSensitivity, 0f);
             transform.eulerAngles = transform.eulerAngles + new Vector3(-Input.GetAxis("Mouse Y") * lookSensitivity, 0f, 0f);
         }
+         */
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Advance Phase"))
         {
 
-            if ((gpManager.isPlayerOnesTurn() && isFirstPlayer) || (!gpManager.isPlayerOnesTurn() && !isFirstPlayer))
+            if ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer()))
             {
                 CmdgpManagerAdvancePhase();
             }
         }
 
-        // testing deck functionality
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetButtonDown("Play Card"))
         {
-            CardTestType newcard = new CardTestType(Random.Range(1, 60));
-            field.getDeck().addCardTop(newcard);
-            field.getDeck().print();
+            if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+            {
+                field.AddMonsterCard();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+
+        if (Input.GetButtonDown("Attack"))
         {
-            CardTestType newcard = new CardTestType(Random.Range(1, 60));
-            field.getDeck().addCardBottom(newcard);
-            field.getDeck().print();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            CardTestType drawnCard = field.getDeck().DrawTop();
-            Debug.Log("Drew: " + drawnCard.getid());
-            field.getDeck().print();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            CardTestType drawnCard = field.getDeck().DrawBottom();
-            Debug.Log("Drew: " + drawnCard.getid());
-            field.getDeck().print();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            field.getDeck().Shuffle();
-            Debug.Log("Shuffled deck");
-            field.getDeck().print();
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            field.setMonsterCardByIndex(field.getDeck().DrawTop(), 0);
-            field.print();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            field.setEffectCardByIndex(field.getDeck().DrawTop(), 1);
-            field.print();
+            if(gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+            {
+                field.Attack();
+            }
         }
     }
 
@@ -137,5 +130,29 @@ public class Player : NetworkBehaviour
         {
             lifepoints += points;
         }
+    }
+
+    public bool IsFirstPlayer()
+    {
+        return playerNumber == 1;
+    }
+
+    private void firstPlayerUpdated(int newVal)
+    {
+        playerNumber = newVal;
+
+        if (isLocalPlayer)
+        {
+            UpdatePlayerNumInfo();
+        }
+    }
+
+    private void UpdatePlayerNumInfo()
+    {
+        gameObject.name = "Player " + playerNumber;
+        playerText.text = "You are player: " + playerNumber;
+        transform.eulerAngles = (IsFirstPlayer() ? new Vector3(0, 270f, 0) : new Vector3(0, 90f, 0));
+
+        field.InitPlayingField();
     }
 }

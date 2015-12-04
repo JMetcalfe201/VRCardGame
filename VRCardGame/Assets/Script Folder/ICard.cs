@@ -5,13 +5,14 @@ public abstract class ICard : MonoBehaviour
 {
 
     [SerializeField]
-    string name;
+    public string cardName;
+    public int cardID;
     [SerializeField]
     string description;
     [SerializeField]
     ECardType cardtype;
     [SerializeField]
-    GameObject _3Dmodel;
+    public GameObject _3Dmodel;
     bool revealed;
     //event OnSummoned; Commented out so it can still be playable.
     //event OnToGraveyard;
