@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  *.sln
  *.userprefs
  *.csproj
@@ -17,3 +18,29 @@
 *.log
 *.log
 *.dll
+=======
+#NOTE: this will cause your collaborators to re-import assets periodically
+Temp/*
+Library/*
+Build/*
+#Un-ignore these specific files
+!Library/*.asset
+!Library/AssetImportState
+!Library/AssetVersioning.db
+!Library/BuildPlayer.prefs
+!Library/ScriptMapper
+!Library/assetservercachev3
+!Library/expandedItems
+!Library/guidmapper
+!Library/unity default resources
+!Library/unity editor resources
+!Library/metadata/
+
+
+#ignoring pidb, they are just code completion caching data according to:
+# http://stackoverflow.com/questions/1022111/what-are-monodevelops-pidb-files
+*.pidb
+*.userprefs
+VRCardGame/Library/metadata/9d/9d5b6fcd5aa307c4db706e495f9a9fb4
+VRCardGame/Library/metadata/da/da43c90a2c93f064494cd85b1be62074
+>>>>>>> 662a90958979d2257fe2956afd7325a309a9f7e6
