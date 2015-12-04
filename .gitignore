@@ -10,11 +10,9 @@
  /Library/ScriptAssemblies
  /obj
  /Temp
-*.info
 VRCardGame/Library/metadata/c1/c1d23413d3176f241b0b71f98ee2364b.info
 *.suo
 VRCardGame/Assets/jackson_test_scene.unity.meta
-*.meta
 VRCardGame/Library/metadata/00/00000000000000005000000000000000
 VRCardGame/Library/metadata/00/00000000000000007000000000000000
 VRCardGame/Library/metadata/04/04b4e80a3391d5745a786f7554ec67b9
