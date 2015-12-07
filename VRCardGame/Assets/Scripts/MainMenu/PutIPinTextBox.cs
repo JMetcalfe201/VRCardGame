@@ -9,6 +9,8 @@ public class PutIPinTextBox : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
+        Cursor.visible = true;
+
         StartCoroutine(SetIP());
 	}
 
@@ -18,7 +20,7 @@ public class PutIPinTextBox : MonoBehaviour
 
         yield return new WaitForSeconds(0.25f);
 
-        text.text = "IP: " + Network.player.externalIP;
+        text.text = "IP: " + Network.player.ipAddress;
         Network.Disconnect();
     }
 }

@@ -30,6 +30,8 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
+
         if (!isLocalPlayer)
         {
             GetComponent<AudioListener>().enabled = false;
