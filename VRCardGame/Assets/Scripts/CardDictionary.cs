@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class CardDictionary : MonoBehaviour {
 
 
-    public List<ICard> cardList;
-
+    public List<GameObject> cardList;
+    
     // Use this for initialization
     void Start () {
 
