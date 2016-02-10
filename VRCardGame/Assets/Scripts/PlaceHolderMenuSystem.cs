@@ -39,10 +39,12 @@ public class PlaceHolderMenuSystem : MonoBehaviour
             if (v > 0)
             {
                 PreviousSelection();
+                Debug.Log("Up");
             }
             else
             {
                 NextSelection();
+                Debug.Log("Down");
             }
 
             vAxisInUse = true;

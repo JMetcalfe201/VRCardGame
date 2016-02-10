@@ -280,55 +280,177 @@ public class PlayingField : NetworkBehaviour
 */
 public class PlayingField : NetworkBehaviour
 {
-    public SyncListInt monsterSyncList = new SyncListInt();
-    public GameObject tempMonsterCard;
-    public Player player;
+    [SerializeField]
+    private GameObject[] monsterCards;
 
-    void Awake()
-    {
-        monsterSyncList.Callback = OnMonsterChanged;
-    }
+    public SyncListInt monsterSync = new SyncListInt();
 
+    private TransformGrid modelSpawnGrid;
+    private Transform friendlyCardSpawnLocation;
+
+    public GameObject dieEffectPrefab;
+
+    private Player player;
+
+    // Use this for initialization
     void Start()
     {
-        player = GetComponent<Player>();
+        monsterCards = new GameObject[5];
 
         if (hasAuthority)
         {
-            CmdInitSyncLists();
+            for(int i = 0; i < 5; i++)
+            {
+                monsterSync.Add(-1);
+            }
         }
-
-        Debug.LogError("NetID " + netId + "'s sync list on " + (Application.isEditor ? "editor " : "standalone ") + "contains " + monsterSyncList.Count + " things");
     }
 
-    [Command]
-    private void CmdInitSyncLists()
+    public override void OnStartClient()
     {
-        for (int i = 0; i < 5; i++)
+        base.OnStartClient();
+
+        monsterSync.Callback = OnMonsterChanged;
+    }
+
+    public void InitPlayingField()
+    {
+        player = GetComponent<Player>();
+
+        modelSpawnGrid = GameObject.Find("_" + (player.IsFirstPlayer() ? "P1" : "P2") + "_FieldGrid").GetComponent<TransformGrid>();
+        friendlyCardSpawnLocation = GameObject.Find("_" + (player.IsFirstPlayer() ? "P1" : "P2") + "_friendlyCards").transform;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void AddMonsterCard(int cardId)
+    {
+        if (isLocalPlayer && !IsFieldFull())
         {
-            monsterSyncList.Add(-1);
+            CmdAddMonsterCard(cardId);
         }
     }
 
-    public void setMonsterCardByIndex(GameObject card, int i)
+    public void Attack(MonsterCard myCard, MonsterCard opponentCard)
     {
-        CmdsetMonsterCardByIndex(card, i);
+        if (isLocalPlayer && myCard != null && opponentCard != null)
+        {
+            CmdAttack(myCard.cardID, opponentCard.cardID);
+        }
     }
 
     [Command]
-    private void CmdsetMonsterCardByIndex(GameObject card, int i)
+    private void CmdAttack(int myID, int opponentID)
     {
-        monsterSyncList[i] = card.GetComponent<ICard>().cardID;
+        uint opponentNetID = (uint)(player.IsFirstPlayer() ? player.gpManager.player2 : player.gpManager.player1);
+
+        NetworkIdentity id = null;
+
+        if (NetworkServer.objects.TryGetValue(new NetworkInstanceId(opponentNetID), out id))
+        {
+            PlayingField oppenentPlayingField = id.gameObject.GetComponent<PlayingField>();
+
+            oppenentPlayingField.GetAttacked((CardDictionary.singleton.GetInfoByID(myID) as MonsterCard).attack, opponentID);
+        }
+    }
+
+    private void GetAttacked(int attack, int targetId)
+    {
+        if (attack > (CardDictionary.singleton.GetInfoByID(targetId) as MonsterCard).attack)
+        {
+            int slot = GetSlot(targetId);
+            if (slot > -1)
+            {
+                DestroyCard(slot);
+            }
+        }
+    }
+
+    private void DestroyCard(int index)
+    {
+        if (monsterCards[index] != null)
+        {
+            if (isClient)
+            {
+                Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3Dmodel.transform.position, Quaternion.identity);
+            }
+            Destroy(monsterCards[index].GetComponent<ICard>()._3Dmodel);
+            Destroy(monsterCards[index]);
+
+            monsterCards[index] = null;
+        }
+
+        if (hasAuthority)
+        {
+            monsterSync[index] = -1;
+        }
+    }
+
+    [Command]
+    private void CmdAddMonsterCard(int cardID)
+    {
+        if (hasAuthority)
+        {
+            int firstEmpty = 0;
+            for (; firstEmpty < monsterSync.Count; firstEmpty++)
+            {
+                if(monsterSync[firstEmpty] == -1)
+                {
+                    break;
+                }
+            }
+
+            if(firstEmpty >= monsterSync.Count)
+            {
+                return;
+            }
+
+            monsterSync[firstEmpty] = cardID;
+
+            monsterCards[firstEmpty] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
+            monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, firstEmpty), modelSpawnGrid.transform.rotation) as GameObject;
+        }
     }
 
     private void OnMonsterChanged(SyncListInt.Operation op, int index)
     {
-        if (SyncListInt.Operation.OP_SET == op)
+        if (!hasAuthority)
         {
-            if (monsterSyncList[index] != -1)
+            if ( op == SyncList<int>.Operation.OP_SET && monsterSync[index] != -1)
             {
-                Debug.LogError("Synced");
+                monsterCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(monsterSync[index]), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
+                monsterCards[index].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[index].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation) as GameObject;
             }
         }
+    }
+
+    public bool IsFieldFull()
+    {
+        for(int i = 0; i < monsterSync.Count; i++)
+        {
+            if(monsterSync[i] == -1)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private int GetSlot(int cardID)
+    {
+        for(int i = 0; i < monsterSync.Count; i++)
+        {
+            if(monsterSync[i] == cardID)
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

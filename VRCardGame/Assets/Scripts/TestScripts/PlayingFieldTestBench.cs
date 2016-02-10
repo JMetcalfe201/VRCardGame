@@ -4,14 +4,12 @@ using System.Collections;
 
 public class PlayingFieldTestBench : NetworkBehaviour
 {
-    private PlayingFieldOneSlot field;
-    //private PlayingField field;
+    private PlayingField field;
 
 	// Use this for initialization
 	void Start () 
     {
-        field = GetComponent<PlayingFieldOneSlot>();
-        //field = GetComponent<PlayingField>();
+        field = GetComponent<PlayingField>();
 	}
 	
 	// Update is called once per frame
@@ -27,8 +25,12 @@ public class PlayingFieldTestBench : NetworkBehaviour
     {
         if(!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1))
         {
-            field.AddMonsterCard();
-            //field.setMonsterCardByIndex(field.tempMonsterCard, 0);
+            field.AddMonsterCard(0);
+        }
+
+        if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            field.AddMonsterCard(1);
         }
     }
 }

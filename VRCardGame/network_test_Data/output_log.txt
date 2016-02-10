@@ -16,19 +16,83 @@ Loading Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.UI.dll i
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.041 seconds
+- Completed reload, in  0.044 seconds
 desktop: 2560x1440 59Hz; virtual: 4000x1440 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\System.dll (this message is harmless)
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 1b80 -> priority: 1 
-  Thread -> id: 1730 -> priority: 1 
+  Thread -> id: 363c -> priority: 1 
+  Thread -> id: 3040 -> priority: 1 
 [VRDevice] Initialization of device oculus failed.
-Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 10.293279 ms
+Down
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
 
-Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 463.
-Total: 0.463952 ms (FindLiveObjects: 0.047693 ms CreateObjectMapping: 0.036222 ms MarkObjects: 0.364339 ms  DeleteObjects: 0.015092 ms)
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.936533 ms
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 482.
+Total: 0.280121 ms (FindLiveObjects: 0.033807 ms CreateObjectMapping: 0.015092 ms MarkObjects: 0.219750 ms  DeleteObjects: 0.011168 ms)
+
+(0.6, 0.7, 2.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(0.6, 0.7, 1.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(0.6, 0.7, 0.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Play card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Enter add monster card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-0.6, 0.7, -2.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Play card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Enter add monster card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-0.6, 0.7, -1.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Play card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Enter add monster card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-0.6, 0.7, 0.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Play card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Enter add monster card
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-0.6, 0.7, 1.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
 

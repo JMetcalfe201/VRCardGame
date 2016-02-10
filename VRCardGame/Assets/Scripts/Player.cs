@@ -16,7 +16,7 @@ public class Player : NetworkBehaviour
     
     public GameplayManager gpManager;
 
-    private PlayingFieldOneSlot field;
+    private PlayingField field;
 
     public Text playerText;
     public Text phaseText;
@@ -25,7 +25,7 @@ public class Player : NetworkBehaviour
     {
         playerNumber = -1;
         gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
-        field = GetComponent<PlayingFieldOneSlot>();
+        field = GetComponent<PlayingField>();
     }
 
     void Start()
@@ -99,7 +99,8 @@ public class Player : NetworkBehaviour
         {
             if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
             {
-                field.AddMonsterCard();
+                Debug.Log("Play card");
+                field.AddMonsterCard((int)(Random.Range(0f, 1.99f)));
             }
         }
 
@@ -107,7 +108,7 @@ public class Player : NetworkBehaviour
         {
             if(gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
             {
-                field.Attack();
+                //field.Attack();
             }
         }
     }
