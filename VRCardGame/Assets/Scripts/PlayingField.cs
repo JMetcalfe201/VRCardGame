@@ -292,14 +292,24 @@ public class PlayingField : NetworkBehaviour
 
     private Player player;
 
+    private Deck playerDeck;
+
     // Use this for initialization
     void Start()
     {
         monsterCards = new GameObject[5];
+        playerDeck = new Deck();
+        // add some sort of load deck contents by integer
+        playerDeck.addCardTop(0);
+        playerDeck.addCardTop(0);
+        playerDeck.addCardTop(1);
+        playerDeck.addCardTop(1);
+        playerDeck.addCardTop(1);
+        playerDeck.Shuffle();
 
         if (hasAuthority)
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 monsterSync.Add(-1);
             }
@@ -452,5 +462,10 @@ public class PlayingField : NetworkBehaviour
         }
 
         return -1;
+    }
+
+    public Deck getDeck()
+    {
+        return playerDeck;
     }
 }
