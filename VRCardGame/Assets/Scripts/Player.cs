@@ -34,10 +34,12 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
-        if (!VRSettings.enabled)
+        if (VRSettings.enabled)
         {
             Cursor.visible = false;
         }
+
+        lifepoints = 800;
 
         attackingCard = -1;
 
@@ -199,11 +201,16 @@ public class Player : NetworkBehaviour
         gpManager.AdvancePhase();
     }
 
-    public void ChangeLifePoints(int points)
+    public void TakeLifePointsDamage(int points)
     {
         if(hasAuthority)
         {
-            lifepoints += points;
+            lifepoints -= points;
+
+            if(lifepoints <= 0)
+            {
+                gpManager.GameOver(this);
+            }
         }
     }
 

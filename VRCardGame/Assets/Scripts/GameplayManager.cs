@@ -77,6 +77,11 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
+    public void GameOver(Player winner)
+    {
+        Debug.LogError(winner.playerText.text + " is the winner!");
+    }
+
     private void OnFirstPlayersTurnChange(bool newTurn)
     {
         firstPlayersTurn = newTurn;
