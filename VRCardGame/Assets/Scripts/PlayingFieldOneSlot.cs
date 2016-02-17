@@ -63,7 +63,7 @@ public class PlayingFieldOneSlot : NetworkBehaviour
     [Command]
     private void CmdAttack()
     {
-        uint opponentNetID = (uint)(player.IsFirstPlayer() ? player.gpManager.player2 : player.gpManager.player1);
+        uint opponentNetID = (uint)(player.IsFirstPlayer() ? player.gpManager.player_2_netID : player.gpManager.player_1_netID);
 
         NetworkIdentity id = null;
 

@@ -21,6 +21,10 @@ public class Player : NetworkBehaviour
     public Text playerText;
     public Text phaseText;
 
+    public int attackingCard;
+
+    public int selectionIndex;
+
     void Awake()
     {
         playerNumber = -1;
@@ -30,7 +34,12 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
-        Cursor.visible = false;
+        if (!VRSettings.enabled)
+        {
+            Cursor.visible = false;
+        }
+
+        attackingCard = -1;
 
         if (!isLocalPlayer)
         {
@@ -45,6 +54,15 @@ public class Player : NetworkBehaviour
             CmdInitPlayer();
             UpdateUI();
         }
+
+        if (playerNumber == 1)
+        {
+            gpManager.p1 = this;
+        }
+        else
+        {
+            gpManager.p2 = this;
+        }
     }
 
     [Command]
@@ -52,14 +70,14 @@ public class Player : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            if(gpManager.player1 == -1)
+            if(gpManager.player_1_netID == -1)
             {
-                gpManager.player1 = (int)netId.Value;
+                gpManager.player_1_netID = (int)netId.Value;
                 playerNumber = 1;
             }
             else
             {
-                gpManager.player2 = (int)netId.Value;
+                gpManager.player_2_netID = (int)netId.Value;
                 playerNumber = 2;
             }
         }
@@ -76,7 +94,7 @@ public class Player : NetworkBehaviour
 
     private void HandleInput()
     {
-        /*
+
         if (!VRSettings.enabled)
         {
             float lookSensitivity = 5.0f;
@@ -84,7 +102,6 @@ public class Player : NetworkBehaviour
             transform.eulerAngles = transform.eulerAngles + new Vector3(0f, Input.GetAxis("Mouse X") * lookSensitivity, 0f);
             transform.eulerAngles = transform.eulerAngles + new Vector3(-Input.GetAxis("Mouse Y") * lookSensitivity, 0f, 0f);
         }
-         */
 
         if (Input.GetButtonDown("Advance Phase"))
         {
@@ -104,11 +121,66 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Attack"))
+        if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
-            if(gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+            if(attackingCard == -1)
             {
-                //field.Attack();
+                if(Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    attackingCard = 0;
+                }
+
+                if(Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    attackingCard = 1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    attackingCard = 2;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                {
+                    attackingCard = 3;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                {
+                    attackingCard = 4;
+                }
+            }
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    field.Attack(attackingCard, 0);
+                    attackingCard = -1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    field.Attack(attackingCard, 1);
+                    attackingCard = -1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    field.Attack(attackingCard, 2);
+                    attackingCard = -1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                {
+                    field.Attack(attackingCard, 3);
+                    attackingCard = -1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                {
+                    field.Attack(attackingCard, 4);
+                    attackingCard = -1;
+                }
             }
         }
     }
@@ -157,5 +229,10 @@ public class Player : NetworkBehaviour
         transform.eulerAngles = (IsFirstPlayer() ? new Vector3(0, 270f, 0) : new Vector3(0, 90f, 0));
 
         field.InitPlayingField();
+    }
+
+    public PlayingField GetPlayingField()
+    {
+        return field;
     }
 }

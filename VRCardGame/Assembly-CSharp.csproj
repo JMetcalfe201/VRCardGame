@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\AutoKillOneOffParticle.cs" />
      <Compile Include="Assets\Scripts\CardDictionary.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
+     <Compile Include="Assets\Scripts\DeckBuilderListPopulation.cs" />
      <Compile Include="Assets\Scripts\GameplayManager.cs" />
      <Compile Include="Assets\Scripts\MainMenu\MainMenuNonVRCorrection.cs" />
      <Compile Include="Assets\Scripts\MainMenu\NetworkMenuRelay.cs" />

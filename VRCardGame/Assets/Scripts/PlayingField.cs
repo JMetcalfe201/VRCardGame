@@ -335,38 +335,40 @@ public class PlayingField : NetworkBehaviour
         }
     }
 
-    public void Attack(MonsterCard myCard, MonsterCard opponentCard)
+    public void Attack(int myIndex, int opponentIndex)
     {
-        if (isLocalPlayer && myCard != null && opponentCard != null)
+        if (isLocalPlayer)
         {
-            CmdAttack(myCard.cardID, opponentCard.cardID);
+            if (monsterCards[myIndex] != null && GetOpposingPlayingField().monsterCards[opponentIndex] != null)
+            {
+                CmdAttack(myIndex, opponentIndex);
+            }
+            else
+            {
+                Debug.Log("One of the slots is empty.");
+            }
         }
     }
 
     [Command]
-    private void CmdAttack(int myID, int opponentID)
+    private void CmdAttack(int myIndex, int opponentIndex)
     {
-        uint opponentNetID = (uint)(player.IsFirstPlayer() ? player.gpManager.player2 : player.gpManager.player1);
+        int myAttack = monsterCards[myIndex].GetComponent<MonsterCard>().attack;
+        int opponentAttack = GetOpposingPlayingField().monsterCards[opponentIndex].GetComponent<MonsterCard>().attack;
 
-        NetworkIdentity id = null;
-
-        if (NetworkServer.objects.TryGetValue(new NetworkInstanceId(opponentNetID), out id))
+        if(myAttack > opponentAttack)
         {
-            PlayingField oppenentPlayingField = id.gameObject.GetComponent<PlayingField>();
-
-            oppenentPlayingField.GetAttacked((CardDictionary.singleton.GetInfoByID(myID) as MonsterCard).attack, opponentID);
+            GetOpposingPlayingField().DestroyCard(opponentIndex);
+            Debug.Log("Attacker wins");
         }
-    }
-
-    private void GetAttacked(int attack, int targetId)
-    {
-        if (attack > (CardDictionary.singleton.GetInfoByID(targetId) as MonsterCard).attack)
+        else if(opponentAttack > myAttack)
         {
-            int slot = GetSlot(targetId);
-            if (slot > -1)
-            {
-                DestroyCard(slot);
-            }
+            DestroyCard(myIndex);
+            Debug.Log("Defender wins");
+        }
+        else
+        {
+            Debug.Log("Tie");
         }
     }
 
@@ -425,6 +427,15 @@ public class PlayingField : NetworkBehaviour
                 monsterCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(monsterSync[index]), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
                 monsterCards[index].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[index].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation) as GameObject;
             }
+            else if (op == SyncList<int>.Operation.OP_SET && monsterSync[index] == -1)
+            {
+                if (isClient)
+                {
+                    Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3Dmodel.transform.position, Quaternion.identity);
+                }
+                Destroy(monsterCards[index].GetComponent<ICard>()._3Dmodel);
+                Destroy(monsterCards[index]);
+            }
         }
     }
 
@@ -441,16 +452,38 @@ public class PlayingField : NetworkBehaviour
         return true;
     }
 
-    private int GetSlot(int cardID)
+    private PlayingField GetOpposingPlayingField()
     {
-        for(int i = 0; i < monsterSync.Count; i++)
+        if(player != null)
         {
-            if(monsterSync[i] == cardID)
+            Debug.Log("Player okay");
+
+            if(player.gpManager != null)
             {
-                return i;
+                Debug.Log("manager okay");
+
+                if(player.gpManager.p2 != null)
+                {
+                    Debug.Log("p2 okay");
+
+                    if(player.gpManager.p1 != null)
+                    {
+                        Debug.Log("p1 okay");
+
+                        if(player.gpManager.p1.GetPlayingField() != null)
+                        {
+                            Debug.Log("p1 field okay");
+
+                            if(player.gpManager.p2.GetPlayingField() != null)
+                            {
+                                Debug.Log("p2 field okay");
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        return -1;
+        return (player.IsFirstPlayer() ? player.gpManager.p2.GetPlayingField() : player.gpManager.p1.GetPlayingField());
     }
 }
