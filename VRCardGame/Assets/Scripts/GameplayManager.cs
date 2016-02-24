@@ -21,14 +21,17 @@ public class GameplayManager : NetworkBehaviour
     private bool firstPlayersTurn;
 
     [SyncVar]
-    public int player1;
+    public int player_1_netID;
     [SyncVar]
-    public int player2;
+    public int player_2_netID;
+
+    public Player p1;
+    public Player p2;
 
     void Awake()
     {
-        player1 = -1;
-        player2 = -1;
+        player_1_netID = -1;
+        player_2_netID = -1;
     }
 
     // Use this for initialization
@@ -74,6 +77,11 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
+    public void GameOver(Player winner)
+    {
+        Debug.LogError(winner.playerText.text + " is the winner!");
+    }
+
     private void OnFirstPlayersTurnChange(bool newTurn)
     {
         firstPlayersTurn = newTurn;
@@ -100,10 +108,5 @@ public class GameplayManager : NetworkBehaviour
     public bool GetFirstPlayerTurn()
     {
         return firstPlayersTurn;
-    }
-
-    public EGamePhase GetPhase()
-    {
-        return currentPhase;
     }
 }
