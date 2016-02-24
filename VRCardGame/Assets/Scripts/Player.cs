@@ -2,7 +2,7 @@
 using UnityEngine.VR;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Player : NetworkBehaviour
 {
@@ -13,10 +13,12 @@ public class Player : NetworkBehaviour
     public int playerNumber;
 
     public Vector2 cursorPosition;
-    
+
     public GameplayManager gpManager;
 
     private PlayingField field;
+    public List<GameObject> hand;
+    private Transform handLocation;
 
     public Text playerText;
     public Text phaseText;
@@ -30,6 +32,7 @@ public class Player : NetworkBehaviour
         playerNumber = -1;
         gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
         field = GetComponent<PlayingField>();
+        hand = new List<GameObject>();
     }
 
     void Start()
@@ -72,7 +75,11 @@ public class Player : NetworkBehaviour
     {
         if (hasAuthority)
         {
+<<<<<<< HEAD
+            if (gpManager.player1 == -1)
+=======
             if(gpManager.player_1_netID == -1)
+>>>>>>> origin/master
             {
                 gpManager.player_1_netID = (int)netId.Value;
                 playerNumber = 1;
@@ -84,15 +91,15 @@ public class Player : NetworkBehaviour
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         if (isLocalPlayer)
         {
             HandleInput();
         }
-	}
+    }
 
     private void HandleInput()
     {
@@ -125,6 +132,9 @@ public class Player : NetworkBehaviour
 
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
+<<<<<<< HEAD
+            if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+=======
             if(attackingCard == -1)
             {
                 if(Input.GetKeyDown(KeyCode.Alpha1))
@@ -153,6 +163,7 @@ public class Player : NetworkBehaviour
                 }
             }
             else
+>>>>>>> origin/master
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
@@ -185,7 +196,30 @@ public class Player : NetworkBehaviour
                 }
             }
         }
+
+        if (Input.GetButtonDown("drawcard_test"))
+        {
+            Debug.Log(field);
+            Debug.Log(field.getDeck());
+            addCardToHand(field.getDeck().DrawTop());
+        }
+
+        if (Input.GetButtonDown("playcard1_test"))
+        {
+            Debug.Log("playcard1_test pressed");
+            playCard(0);
+        }
+        if (Input.GetButtonDown("playcard2_test"))
+        {
+            playCard(1);
+        }
+        if (Input.GetButtonDown("playcard3_test"))
+        {
+            playCard(2);
+        }
     }
+
+    //CmdAddCard
 
     public void UpdateUI()
     {
@@ -203,7 +237,7 @@ public class Player : NetworkBehaviour
 
     public void TakeLifePointsDamage(int points)
     {
-        if(hasAuthority)
+        if (hasAuthority)
         {
             lifepoints -= points;
 
@@ -236,6 +270,45 @@ public class Player : NetworkBehaviour
         transform.eulerAngles = (IsFirstPlayer() ? new Vector3(0, 270f, 0) : new Vector3(0, 90f, 0));
 
         field.InitPlayingField();
+        InitHand();
+    }
+
+    private void addCardToHand(int card_id)
+    {
+        GameObject theCard = GameObject.Find("CardDictionary").GetComponent<CardDictionary>().GetPrefabByID(card_id);
+        theCard = Instantiate(theCard, handLocation.position, handLocation.rotation) as GameObject;
+        hand.Add(theCard);
+        fixHandCardPositions(hand.Count - 1);
+    }
+
+    private void playCard(int cardIndex)
+    {
+        field.AddMonsterCard(hand[cardIndex].GetComponent<MonsterCard>().cardID);
+
+        GameObject cardToDestroy = hand[cardIndex];
+        hand.RemoveAt(cardIndex);
+        Destroy(cardToDestroy);
+        if (hand.Count > cardIndex)
+        {
+            fixHandCardPositions(cardIndex);
+        }
+    }
+
+    private void fixHandCardPositions(int startIndex)
+    {
+        for(int i=startIndex; i<hand.Count; i++)
+        {
+            Mesh msh = hand[i].GetComponentInChildren<MeshFilter>().mesh;
+            float wid = msh.bounds.size.x * hand[i].GetComponentInChildren<MeshFilter>().transform.lossyScale.z;
+            Vector3 cardPosition = handLocation.position;
+            cardPosition.z += i * wid;
+            hand[i].transform.position = cardPosition;
+        }
+    }
+
+    private void InitHand()
+    {
+        handLocation = GameObject.Find("_" + (IsFirstPlayer() ? "P1" : "P2") + "_handLocation").transform;
     }
 
     public PlayingField GetPlayingField()

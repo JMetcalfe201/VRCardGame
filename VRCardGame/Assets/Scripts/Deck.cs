@@ -2,49 +2,60 @@
 using UnityEngine.VR;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using System.Collections.Generic;   // Needed for List<T>
+using System.Collections.Generic;
 
 public class Deck
 {
     // Index 0 is considered the "bottom"
-    private List<ICard> cards;
+    private List<int> cards;
 
-    public Deck() { cards = new List<ICard>(); }
+    public Deck()
+    {
+        cards = new List<int>();
+        addCardTop(0);
+    }
+    // Construct a deck from a list of integer card IDs
+    public Deck(List<int> idlist)
+    {
+        cards = idlist;
+    }
 
     public void Shuffle()
     {
         for (int i = 0; i < cards.Count; i++)
         {
-            ICard temp = cards[i];
+            int temp = cards[i];
             int randomIndex = Random.Range(i, cards.Count);
             cards[i] = cards[randomIndex];
             cards[randomIndex] = temp;
         }
     }
 
-    public ICard DrawTop()
+    public int DrawTop()
     {
         if (cards.Count < 1)
         {
             Debug.Log("Tried to draw top card from empty deck");
         }
         int last_index = cards.Count - 1;
-        ICard topcard = cards[last_index];
+        int topcard = cards[last_index];
         cards.RemoveAt(last_index);
         return topcard;
     }
-    public ICard DrawBottom()
+    public int DrawBottom()
     {
         if (cards.Count < 1)
         {
             Debug.Log("Tried to draw bottom card from empty deck");
         }
-        ICard bottomcard = cards[0];
+        int bottomcard = cards[0];
         cards.RemoveAt(0);
         return bottomcard;
     }
-    public void addCardBottom(ICard c) { cards.Insert(0, c); }
-    public void addCardTop(ICard c) { cards.Add(c); }
+    public void addCardBottom(int c) { cards.Insert(0, c); }
+    public void addCardTop(int c) { cards.Add(c); }
+
+    /*
     public ICard takeCard(string card_name)
     {
         int card_index = cards.FindIndex(
@@ -65,13 +76,14 @@ public class Deck
             return null;
         }
     }
+    */
 
     public void print()
     {
         string outputString = "";
-        foreach (ICard c in cards)
+        foreach (int c in cards)
         {
-            outputString = outputString + c.cardName + ' ';
+            outputString = outputString + c + ' ';
         }
         Debug.Log("Deck Contents: " + outputString);
     }
