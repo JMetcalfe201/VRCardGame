@@ -28,6 +28,23 @@ public class GameplayManager : NetworkBehaviour
     public Player p1;
     public Player p2;
 
+    public static GameplayManager singleton = null;
+
+    /*
+    // Events
+    public delegate void FieldEventDelegate(int player, int cardIndex);
+    public delegate void PlayerEventDelegate(int player, int lifepointDamage);
+
+    [SyncEvent]
+    public event FieldEventDelegate EventCardPlaced;
+    [SyncEvent]
+    public event FieldEventDelegate EventCardDestroyed;
+    [SyncEvent]
+    public event FieldEventDelegate EventCardRevealed;
+    [SyncEvent]
+    public event PlayerEventDelegate EventPlayerDamaged;
+    */
+
     void Awake()
     {
         player_1_netID = -1;
@@ -37,6 +54,15 @@ public class GameplayManager : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        if(singleton != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            singleton = this;
+        }
+
         currentPhase = EGamePhase.DrawPhase;
         firstPlayersTurn = true;
 	}
@@ -109,4 +135,31 @@ public class GameplayManager : NetworkBehaviour
     {
         return firstPlayersTurn;
     }
+
+    /*
+    //Event Callers: these are commands so that the events will be called on the server instance of this script. Since these are "SyncEvents" they will automatically be called on all other instances of this script.
+    [Command]
+    public void CmdEventCardPlaced(int player, int cardIndex)
+    {
+        EventCardPlaced(player, cardIndex);
+    }
+    
+    [Command]
+    public void CmdEventCardDestroyed(int player, int cardIndex)
+    {
+        EventCardDestroyed(player, cardIndex);
+    }
+
+    [Command]
+    public void CmdEventCardRevealed(int player, int cardIndex)
+    {
+        EventCardRevealed(player, cardIndex);
+    }
+
+    [Command]
+    public void CmdEventPlayerDamaged(int player, int lifepointDamage)
+    {
+        EventPlayerDamaged(player, lifepointDamage);
+    }
+     */
 }

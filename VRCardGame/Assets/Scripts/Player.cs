@@ -193,6 +193,7 @@ public class Player : NetworkBehaviour
         {
             Debug.Log(field);
             Debug.Log(field.getDeck());
+            field.getDeck().print();
             addCardToHand(field.getDeck().DrawTop());
         }
 
