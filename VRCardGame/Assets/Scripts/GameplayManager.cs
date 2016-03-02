@@ -30,6 +30,7 @@ public class GameplayManager : NetworkBehaviour
 
     public static GameplayManager singleton = null;
 
+    /*
     // Events
     public delegate void FieldEventDelegate(int player, int cardIndex);
     public delegate void PlayerEventDelegate(int player, int lifepointDamage);
@@ -42,6 +43,7 @@ public class GameplayManager : NetworkBehaviour
     public event FieldEventDelegate EventCardRevealed;
     [SyncEvent]
     public event PlayerEventDelegate EventPlayerDamaged;
+    */
 
     void Awake()
     {
@@ -134,6 +136,7 @@ public class GameplayManager : NetworkBehaviour
         return firstPlayersTurn;
     }
 
+    /*
     //Event Callers: these are commands so that the events will be called on the server instance of this script. Since these are "SyncEvents" they will automatically be called on all other instances of this script.
     [Command]
     public void CmdEventCardPlaced(int player, int cardIndex)
@@ -158,4 +161,5 @@ public class GameplayManager : NetworkBehaviour
     {
         EventPlayerDamaged(player, lifepointDamage);
     }
+     */
 }

@@ -28,11 +28,10 @@ public class PlayingField : NetworkBehaviour
         monsterCards = new GameObject[5];
         playerDeck = new Deck();
         // add some sort of load deck contents by integer
-        playerDeck.addCardTop(0);
-        playerDeck.addCardTop(0);
-        playerDeck.addCardTop(1);
-        playerDeck.addCardTop(1);
-        playerDeck.addCardTop(1);
+        for (int i = 0; i < 15; i++)
+        {
+            playerDeck.addCardTop(Random.Range(0, 4));
+        }
         playerDeck.Shuffle();
 
         if (hasAuthority)
