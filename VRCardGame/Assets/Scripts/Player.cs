@@ -75,11 +75,7 @@ public class Player : NetworkBehaviour
     {
         if (hasAuthority)
         {
-<<<<<<< HEAD
-            if (gpManager.player1 == -1)
-=======
             if(gpManager.player_1_netID == -1)
->>>>>>> origin/master
             {
                 gpManager.player_1_netID = (int)netId.Value;
                 playerNumber = 1;
@@ -132,9 +128,6 @@ public class Player : NetworkBehaviour
 
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
-<<<<<<< HEAD
-            if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
-=======
             if(attackingCard == -1)
             {
                 if(Input.GetKeyDown(KeyCode.Alpha1))
@@ -163,7 +156,6 @@ public class Player : NetworkBehaviour
                 }
             }
             else
->>>>>>> origin/master
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
