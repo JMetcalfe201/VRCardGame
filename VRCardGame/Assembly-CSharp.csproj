@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayingField.cs" />
      <Compile Include="Assets\Scripts\PlayingFieldOneSlot.cs" />
+     <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
      <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
      <Compile Include="Assets\Scripts\TransformGrid.cs" />
