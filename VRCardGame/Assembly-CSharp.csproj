@@ -68,11 +68,17 @@
      <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
      <Compile Include="Assets\Scripts\TransformGrid.cs" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>Z:/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
