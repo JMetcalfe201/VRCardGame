@@ -97,17 +97,20 @@ public class PlayingField : NetworkBehaviour
         {
             GetOpposingPlayingField().DestroyCard(opponentIndex);
             GetOpposingPlayingField().player.TakeLifePointsDamage(myAttack - opponentAttack);
+            player.gpManager.Cmd_EventCardDestroyed(GetOpposingPlayingField().player.playerNumber, opponentIndex);
         }
         else if(opponentAttack > myAttack)
         {
             DestroyCard(myIndex);
             player.TakeLifePointsDamage(opponentAttack - myAttack);
+            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, myIndex);
         }
         else
         {
             DestroyCard(myIndex);
             GetOpposingPlayingField().DestroyCard(opponentIndex);
-            Debug.Log("Tie");
+            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, myIndex);
+            player.gpManager.Cmd_EventCardDestroyed(GetOpposingPlayingField().player.playerNumber, opponentIndex);
         }
     }
 
@@ -154,6 +157,8 @@ public class PlayingField : NetworkBehaviour
 
             monsterCards[firstEmpty] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
             monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, firstEmpty), modelSpawnGrid.transform.rotation) as GameObject;
+
+            player.gpManager.Cmd_EventCardPlaced(player.playerNumber, firstEmpty);
         }
     }
 

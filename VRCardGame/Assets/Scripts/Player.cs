@@ -238,6 +238,8 @@ public class Player : NetworkBehaviour
             {
                 gpManager.GameOver(this);
             }
+
+            gpManager.Cmd_EventPlayerDamaged(playerNumber, points);
         }
     }
 

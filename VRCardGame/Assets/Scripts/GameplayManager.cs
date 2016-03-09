@@ -30,31 +30,21 @@ public class GameplayManager : NetworkBehaviour
 
     public static GameplayManager singleton = null;
 
-    /*
     // Events
     public delegate void FieldEventDelegate(int player, int cardIndex);
     public delegate void PlayerEventDelegate(int player, int lifepointDamage);
 
-    [SyncEvent]
     public event FieldEventDelegate EventCardPlaced;
-    [SyncEvent]
     public event FieldEventDelegate EventCardDestroyed;
-    [SyncEvent]
     public event FieldEventDelegate EventCardRevealed;
-    [SyncEvent]
     public event PlayerEventDelegate EventPlayerDamaged;
-    */
 
     void Awake()
     {
         player_1_netID = -1;
         player_2_netID = -1;
-    }
 
-    // Use this for initialization
-    void Start()
-    {
-        if(singleton != null)
+        if (singleton != null)
         {
             Destroy(gameObject);
         }
@@ -62,7 +52,11 @@ public class GameplayManager : NetworkBehaviour
         {
             singleton = this;
         }
+    }
 
+    // Use this for initialization
+    void Start()
+    {
         currentPhase = EGamePhase.DrawPhase;
         firstPlayersTurn = true;
 	}
@@ -136,30 +130,52 @@ public class GameplayManager : NetworkBehaviour
         return firstPlayersTurn;
     }
 
-    /*
     //Event Callers: these are commands so that the events will be called on the server instance of this script. Since these are "SyncEvents" they will automatically be called on all other instances of this script.
     [Command]
-    public void CmdEventCardPlaced(int player, int cardIndex)
+    public void Cmd_EventCardPlaced(int player, int cardIndex)
     {
-        EventCardPlaced(player, cardIndex);
+        Rpc_EventCardPlaced(player, cardIndex);
     }
     
     [Command]
-    public void CmdEventCardDestroyed(int player, int cardIndex)
+    public void Cmd_EventCardDestroyed(int player, int cardIndex)
+    {
+        Rpc_EventCardDestroyed(player, cardIndex);
+    }
+
+    [Command]
+    public void Cmd_EventCardRevealed(int player, int cardIndex)
+    {
+        Rpc_EventCardRevealed(player, cardIndex);
+    }
+
+    [Command]
+    public void Cmd_EventPlayerDamaged(int player, int lifepointDamage)
+    {
+        Rpc_EventPlayerDamaged(player, lifepointDamage);
+    }
+
+    [ClientRpc]
+    private void Rpc_EventCardPlaced(int player, int cardIndex)
+    {
+        EventCardPlaced(player, cardIndex);
+    }
+
+    [ClientRpc]
+    private void Rpc_EventCardDestroyed(int player, int cardIndex)
     {
         EventCardDestroyed(player, cardIndex);
     }
 
-    [Command]
-    public void CmdEventCardRevealed(int player, int cardIndex)
+    [ClientRpc]
+    private void Rpc_EventCardRevealed(int player, int cardIndex)
     {
         EventCardRevealed(player, cardIndex);
     }
 
-    [Command]
-    public void CmdEventPlayerDamaged(int player, int lifepointDamage)
+    [ClientRpc]
+    private void Rpc_EventPlayerDamaged(int player, int lifepointDamage)
     {
         EventPlayerDamaged(player, lifepointDamage);
     }
-     */
 }
