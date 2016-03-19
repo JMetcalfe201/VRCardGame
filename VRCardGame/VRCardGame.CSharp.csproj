@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Deck.cs" />
     <Compile Include="Assets\Scripts\DeckBuilderListPopulation.cs" />
     <Compile Include="Assets\Scripts\GameplayManager.cs" />
+    <Compile Include="Assets\Scripts\GrassRandomizer.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenuNonVRCorrection.cs" />
     <Compile Include="Assets\Scripts\MainMenu\NetworkMenuRelay.cs" />
     <Compile Include="Assets\Scripts\MainMenu\PutIPinTextBox.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayingField.cs" />
     <Compile Include="Assets\Scripts\PlayingFieldOneSlot.cs" />
+    <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
     <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
     <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
     <Compile Include="Assets\Scripts\TransformGrid.cs" />
