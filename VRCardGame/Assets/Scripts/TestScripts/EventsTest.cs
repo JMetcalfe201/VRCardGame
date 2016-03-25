@@ -16,14 +16,14 @@ public class EventsTest : MonoBehaviour {
 	
 	}
 
-    public void CardDestroyed(int player, int slot)
+    public void CardDestroyed(int player, int slotY, int slotX)
     {
-        Debug.Log("Player " + player + "'s card in slot " + slot + " was destroyed.");
+        Debug.Log("Player " + player + "'s card in slot " + slotX + " was destroyed.");
     }
 
-    public void CardPlayed(int player, int slot)
+    public void CardPlayed(int player, int slotY, int slotX)
     {
-        Debug.Log("Player " + player + " played a card in slot " + slot + ".");
+        Debug.Log("Player " + player + " played a card in slot " + slotX + ".");
     }
 
     public void PlayerHurt(int player, int points)

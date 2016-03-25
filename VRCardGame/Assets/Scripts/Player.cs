@@ -117,15 +117,6 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Play Card"))
-        {
-            if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
-            {
-                Debug.Log("Play card");
-                field.AddMonsterCard((int)(Random.Range(0f, 1.99f)));
-            }
-        }
-
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
             if(attackingCard == -1)
@@ -272,13 +263,15 @@ public class Player : NetworkBehaviour
     {
         GameObject theCard = GameObject.Find("CardDictionary").GetComponent<CardDictionary>().GetPrefabByID(card_id);
         theCard = Instantiate(theCard, handLocation.position, handLocation.rotation) as GameObject;
+        theCard.GetComponent<ICard>().Placed(false);
+        theCard.GetComponent<ICard>().Reveal();
         hand.Add(theCard);
         fixHandCardPositions(hand.Count - 1);
     }
 
     private void playCard(int cardIndex)
     {
-        field.AddMonsterCard(hand[cardIndex].GetComponent<MonsterCard>().cardID);
+        field.AddCard(hand[cardIndex].GetComponent<MonsterCard>().cardID, true);
 
         GameObject cardToDestroy = hand[cardIndex];
         hand.RemoveAt(cardIndex);

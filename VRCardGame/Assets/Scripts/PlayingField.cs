@@ -10,23 +10,31 @@ public class PlayingField : NetworkBehaviour
 {
     [SerializeField]
     private GameObject[] monsterCards;
+    [SerializeField]
+    private GameObject[] effectCards;
 
     public SyncListInt monsterSync = new SyncListInt();
+    public SyncListInt effectSync = new SyncListInt();
 
     private TransformGrid modelSpawnGrid;
-    private Transform friendlyCardSpawnLocation;
+    private TransformGrid friendlyCardSpawnLocation;
 
     public GameObject dieEffectPrefab;
 
     private Player player;
 
     private Deck playerDeck;
+    private Deck graveyard;
 
     // Use this for initialization
     void Start()
     {
         monsterCards = new GameObject[5];
+        effectCards = new GameObject[5];
+
         playerDeck = new Deck();
+        graveyard = new Deck();
+
         // add some sort of load deck contents by integer
         for (int i = 0; i < 15; i++)
         {
@@ -39,6 +47,7 @@ public class PlayingField : NetworkBehaviour
             for (int i = 0; i < 5; i++)
             {
                 monsterSync.Add(-1);
+                effectSync.Add(-1);
             }
         }
     }
@@ -48,6 +57,7 @@ public class PlayingField : NetworkBehaviour
         base.OnStartClient();
 
         monsterSync.Callback = OnMonsterChanged;
+        effectSync.Callback = OnEffectChanged;
     }
 
     public void InitPlayingField()
@@ -55,7 +65,15 @@ public class PlayingField : NetworkBehaviour
         player = GetComponent<Player>();
 
         modelSpawnGrid = GameObject.Find("_" + (player.IsFirstPlayer() ? "P1" : "P2") + "_FieldGrid").GetComponent<TransformGrid>();
-        friendlyCardSpawnLocation = GameObject.Find("_" + (player.IsFirstPlayer() ? "P1" : "P2") + "_friendlyCards").transform;
+
+        if (isLocalPlayer)
+        {
+            friendlyCardSpawnLocation = GameObject.Find("_" + (player.IsFirstPlayer() ? "P1" : "P2") + "_friendlyCardsGrid").GetComponent<TransformGrid>();
+        }
+        else
+        {
+            friendlyCardSpawnLocation = GameObject.Find("_" + (player.IsFirstPlayer() ? "P2" : "P1") + "_enemyCardsGrid").GetComponent<TransformGrid>();
+        }
     }
 
     // Update is called once per frame
@@ -64,11 +82,37 @@ public class PlayingField : NetworkBehaviour
 
     }
 
-    public void AddMonsterCard(int cardId)
+    public void AddCard(int cardId, bool revealed)
     {
-        if (isLocalPlayer && !IsFieldFull())
+        if(CardDictionary.singleton.GetCardType(cardId) == ECardType.MONSTER_CARD)
         {
-            CmdAddMonsterCard(cardId);
+            Debug.LogError("AddingCard: " + cardId + " Revealed: " + revealed);
+            AddMonsterCard(cardId, revealed);
+        }
+        else if(CardDictionary.singleton.GetCardType(cardId) != ECardType.UNKNOWN)
+        {
+            AddEffectCard(cardId, revealed);
+        }
+        else
+        {
+            Debug.LogError("Cannot play a card of type ECardType.UNKOWN");
+        }
+    }
+
+    private void AddMonsterCard(int cardId, bool revealed)
+    {
+        if (isLocalPlayer && !IsFieldFull(ECardType.MONSTER_CARD))
+        {
+            Debug.LogError("AddingCard: " + cardId + " Revealed: " + revealed);
+            CmdAddMonsterCard(cardId, revealed);
+        }
+    }
+
+    private void AddEffectCard(int cardId, bool revealed)
+    {
+        if(isLocalPlayer && !IsFieldFull(ECardType.MAGIC_CARD))
+        {
+            CmdAddEffectCard(cardId, revealed);
         }
     }
 
@@ -95,47 +139,85 @@ public class PlayingField : NetworkBehaviour
 
         if(myAttack > opponentAttack)
         {
-            GetOpposingPlayingField().DestroyCard(opponentIndex);
+            GetOpposingPlayingField().DestroyMonsterCard(opponentIndex);
             GetOpposingPlayingField().player.TakeLifePointsDamage(myAttack - opponentAttack);
-            player.gpManager.Cmd_EventCardDestroyed(GetOpposingPlayingField().player.playerNumber, opponentIndex);
         }
         else if(opponentAttack > myAttack)
         {
-            DestroyCard(myIndex);
+            DestroyMonsterCard(myIndex);
             player.TakeLifePointsDamage(opponentAttack - myAttack);
-            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, myIndex);
         }
         else
         {
-            DestroyCard(myIndex);
-            GetOpposingPlayingField().DestroyCard(opponentIndex);
-            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, myIndex);
-            player.gpManager.Cmd_EventCardDestroyed(GetOpposingPlayingField().player.playerNumber, opponentIndex);
+            DestroyMonsterCard(myIndex);
+            GetOpposingPlayingField().DestroyMonsterCard(opponentIndex);
         }
     }
 
-    private void DestroyCard(int index)
+    private void DestroyMonsterCard(int index)
     {
         if (monsterCards[index] != null)
         {
             if (isClient)
             {
-                Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3Dmodel.transform.position, Quaternion.identity);
+                Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3DmonsterModel.transform.position, Quaternion.identity);
             }
-            Destroy(monsterCards[index].GetComponent<ICard>()._3Dmodel);
+            Destroy(monsterCards[index].GetComponent<ICard>()._3DmonsterModel);
             Destroy(monsterCards[index]);
 
             monsterCards[index] = null;
+           
+            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, 1, index);
         }
 
         if (hasAuthority)
         {
+            CmdSendCardToGraveyard(monsterSync[index]);
             monsterSync[index] = -1;
         }
     }
 
+    private void DestroyEffectCard(int index)
+    {
+        if (effectCards[index] != null)
+        {
+            if (isClient)
+            {
+                Instantiate(dieEffectPrefab, effectCards[index].GetComponent<ICard>()._3DmonsterModel.transform.position, Quaternion.identity);
+            }
+            Destroy(effectCards[index].GetComponent<ICard>()._3DmonsterModel);
+            Destroy(effectCards[index]);
+
+            effectCards[index] = null;
+
+            player.gpManager.Cmd_EventCardDestroyed(player.playerNumber, 0, index);
+        }
+
+        if (hasAuthority)
+        {
+            CmdSendCardToGraveyard(effectSync[index]);
+            effectSync[index] = -1;
+        }
+    }
+
     [Command]
-    private void CmdAddMonsterCard(int cardID)
+    private void CmdSendCardToGraveyard(int id)
+    {
+        // Add card to graveyard
+        graveyard.addCardTop(id);
+
+        // Replicate to clients
+        RpcSendCardToGraveyard(id);
+    }
+
+    [ClientRpc]
+    private void RpcSendCardToGraveyard(int id)
+    {
+        graveyard.addCardTop(id);
+    }
+
+    [Command]
+    private void CmdAddMonsterCard(int cardID, bool attackMode)
     {
         if (hasAuthority)
         {
@@ -155,10 +237,57 @@ public class PlayingField : NetworkBehaviour
 
             monsterSync[firstEmpty] = cardID;
 
-            monsterCards[firstEmpty] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
-            monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[firstEmpty].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, firstEmpty), modelSpawnGrid.transform.rotation) as GameObject;
+            monsterCards[firstEmpty] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.GetPositionAt(1, firstEmpty), friendlyCardSpawnLocation.transform.rotation) as GameObject;
+            MonsterCard card = monsterCards[firstEmpty].GetComponent<MonsterCard>();
+            card.Placed(true);
+            card.SetMonsterModelTransform(modelSpawnGrid.GetPositionAt(1, firstEmpty), modelSpawnGrid.transform.rotation.eulerAngles);
 
-            player.gpManager.Cmd_EventCardPlaced(player.playerNumber, firstEmpty);
+            if(attackMode)
+            {
+                card.Reveal();
+            }
+            else
+            {
+                card.SetDefenseMode();
+            }
+
+            player.gpManager.Cmd_EventCardPlaced(player.playerNumber, 1, firstEmpty);
+        }
+    }
+
+    [Command]
+    private void CmdAddEffectCard(int cardID, bool activate)
+    {
+        if (hasAuthority)
+        {
+            int firstEmpty = 0;
+            for (; firstEmpty < effectSync.Count; firstEmpty++)
+            {
+                if (effectSync[firstEmpty] == -1)
+                {
+                    break;
+                }
+            }
+
+            if (firstEmpty >= effectSync.Count)
+            {
+                return;
+            }
+
+            effectSync[firstEmpty] = cardID;
+
+            effectCards[firstEmpty] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.GetPositionAt(0, firstEmpty), friendlyCardSpawnLocation.transform.rotation) as GameObject;
+            ICard card = effectCards[firstEmpty].GetComponent<ICard>();
+            card._3DmonsterModel = Instantiate(effectCards[firstEmpty].GetComponent<ICard>()._3DmonsterModel, modelSpawnGrid.GetPositionAt(0, firstEmpty), modelSpawnGrid.transform.rotation) as GameObject;
+            
+            if(activate)
+            {
+                card.Reveal();
+                
+                // Activate Card's effect
+            }
+
+            player.gpManager.Cmd_EventCardPlaced(player.playerNumber, 0, firstEmpty);
         }
     }
 
@@ -168,28 +297,67 @@ public class PlayingField : NetworkBehaviour
         {
             if ( op == SyncList<int>.Operation.OP_SET && monsterSync[index] != -1)
             {
-                monsterCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(monsterSync[index]), friendlyCardSpawnLocation.position, friendlyCardSpawnLocation.rotation) as GameObject;
-                monsterCards[index].GetComponent<ICard>()._3Dmodel = Instantiate(monsterCards[index].GetComponent<ICard>()._3Dmodel, modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation) as GameObject;
+                monsterCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(monsterSync[index]), friendlyCardSpawnLocation.GetPositionAt(1, index), friendlyCardSpawnLocation.transform.rotation) as GameObject;
+                ICard card = monsterCards[index].GetComponent<ICard>();
+                card.Placed(true);
+                card.SetMonsterModelTransform(modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation.eulerAngles);
+                card.Reveal();
             }
             else if (op == SyncList<int>.Operation.OP_SET && monsterSync[index] == -1)
             {
                 if (isClient)
                 {
-                    Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3Dmodel.transform.position, Quaternion.identity);
+                    Instantiate(dieEffectPrefab, monsterCards[index].GetComponent<ICard>()._3DmonsterModel.transform.position, Quaternion.identity);
                 }
-                Destroy(monsterCards[index].GetComponent<ICard>()._3Dmodel);
+                Destroy(monsterCards[index].GetComponent<ICard>()._3DmonsterModel);
                 Destroy(monsterCards[index]);
             }
         }
     }
 
-    public bool IsFieldFull()
+    private void OnEffectChanged(SyncListInt.Operation op, int index)
     {
-        for(int i = 0; i < monsterSync.Count; i++)
+        if (!hasAuthority)
         {
-            if(monsterSync[i] == -1)
+            if (op == SyncList<int>.Operation.OP_SET && effectSync[index] != -1)
             {
-                return false;
+                effectCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(effectSync[index]), friendlyCardSpawnLocation.GetPositionAt(0, index), friendlyCardSpawnLocation.transform.rotation) as GameObject;
+                ICard card = effectCards[index].GetComponent<ICard>();
+                card.Placed(true);
+                card.SetMonsterModelTransform(modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation.eulerAngles);
+            }
+            else if (op == SyncList<int>.Operation.OP_SET && effectSync[index] == -1)
+            {
+                if (isClient)
+                {
+                    Instantiate(dieEffectPrefab, effectCards[index].GetComponent<ICard>()._3DmonsterModel.transform.position, Quaternion.identity);
+                }
+                Destroy(effectCards[index].GetComponent<ICard>()._3DmonsterModel);
+                Destroy(effectCards[index]);
+            }
+        }
+    }
+
+    public bool IsFieldFull(ECardType type)
+    {
+        if (type == ECardType.MONSTER_CARD)
+        {
+            for (int i = 0; i < monsterSync.Count; i++)
+            {
+                if (monsterSync[i] == -1)
+                {
+                    return false;
+                }
+            }
+        }
+        else if(type != ECardType.UNKNOWN)
+        {
+            for (int i = 0; i < effectSync.Count; i++)
+            {
+                if (effectSync[i] == -1)
+                {
+                    return false;
+                }
             }
         }
 

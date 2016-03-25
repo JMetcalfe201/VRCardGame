@@ -1,7 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCardGame.CSharp", "VRCardGame.CSharp.csproj", "{3000310F-F47A-0FA5-28C0-94ED6DEDE522}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{60D8C770-649C-C0C3-FC27-644634B5DD13}") = "VRCardGame", "Assembly-CSharp.csproj", "{7487763C-1E83-CB07-40E5-1B1A2D90D028}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,16 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3000310F-F47A-0FA5-28C0-94ED6DEDE522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3000310F-F47A-0FA5-28C0-94ED6DEDE522}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3000310F-F47A-0FA5-28C0-94ED6DEDE522}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3000310F-F47A-0FA5-28C0-94ED6DEDE522}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7487763C-1E83-CB07-40E5-1B1A2D90D028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7487763C-1E83-CB07-40E5-1B1A2D90D028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7487763C-1E83-CB07-40E5-1B1A2D90D028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7487763C-1E83-CB07-40E5-1B1A2D90D028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-<<<<<<< HEAD
-																																																								GlobalSection(MonoDevelopProperties) = preSolution
+																																																																															GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
@@ -38,6 +37,4 @@ Global
 		$3.scope = text/plain
 	EndGlobalSection
 
-=======
->>>>>>> e6b2853df9b0fdb152eaf359a9c26f22f7f4591e
 EndGlobal

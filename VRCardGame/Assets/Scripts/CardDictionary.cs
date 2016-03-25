@@ -31,4 +31,16 @@ public class CardDictionary : MonoBehaviour
     {
         return cardList[id].GetComponent<ICard>();
     }
+
+    public ECardType GetCardType(int id)
+    {
+        if (id > -1 && id < cardList.Count)
+        {
+            return cardList[id].GetComponent<ICard>().cardtype;
+        }
+        else
+        {
+            return ECardType.UNKNOWN;
+        }
+    }
 }

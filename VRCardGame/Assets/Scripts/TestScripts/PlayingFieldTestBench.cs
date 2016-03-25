@@ -25,12 +25,12 @@ public class PlayingFieldTestBench : NetworkBehaviour
     {
         if(!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1))
         {
-            field.AddMonsterCard(0);
+            field.AddCard(0, true);
         }
 
         if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1))
         {
-            field.AddMonsterCard(1);
+            field.AddCard(1, true);
         }
     }
 }

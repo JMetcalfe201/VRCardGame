@@ -31,7 +31,7 @@ public class GameplayManager : NetworkBehaviour
     public static GameplayManager singleton = null;
 
     // Events
-    public delegate void FieldEventDelegate(int player, int cardIndex);
+    public delegate void FieldEventDelegate(int player, int cardIndexRow, int cardIndexCol);
     public delegate void PlayerEventDelegate(int player, int lifepointDamage);
 
     public event FieldEventDelegate EventCardPlaced;
@@ -132,21 +132,21 @@ public class GameplayManager : NetworkBehaviour
 
     //Event Callers: these are commands so that the events will be called on the server instance of this script. Since these are "SyncEvents" they will automatically be called on all other instances of this script.
     [Command]
-    public void Cmd_EventCardPlaced(int player, int cardIndex)
+    public void Cmd_EventCardPlaced(int player, int cardIndexRow, int cardIndexCol)
     {
-        Rpc_EventCardPlaced(player, cardIndex);
+        Rpc_EventCardPlaced(player, cardIndexRow, cardIndexCol);
     }
     
     [Command]
-    public void Cmd_EventCardDestroyed(int player, int cardIndex)
+    public void Cmd_EventCardDestroyed(int player, int cardIndexRow, int cardIndexCol)
     {
-        Rpc_EventCardDestroyed(player, cardIndex);
+        Rpc_EventCardDestroyed(player, cardIndexRow, cardIndexCol);
     }
 
     [Command]
-    public void Cmd_EventCardRevealed(int player, int cardIndex)
+    public void Cmd_EventCardRevealed(int player, int cardIndexRow, int cardIndexCol)
     {
-        Rpc_EventCardRevealed(player, cardIndex);
+        Rpc_EventCardRevealed(player, cardIndexRow, cardIndexCol);
     }
 
     [Command]
@@ -156,21 +156,21 @@ public class GameplayManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void Rpc_EventCardPlaced(int player, int cardIndex)
+    private void Rpc_EventCardPlaced(int player, int cardIndexRow, int cardIndexCol)
     {
-        EventCardPlaced(player, cardIndex);
+        EventCardPlaced(player, cardIndexRow, cardIndexCol);
     }
 
     [ClientRpc]
-    private void Rpc_EventCardDestroyed(int player, int cardIndex)
+    private void Rpc_EventCardDestroyed(int player, int cardIndexRow, int cardIndexCol)
     {
-        EventCardDestroyed(player, cardIndex);
+        EventCardDestroyed(player, cardIndexRow, cardIndexCol);
     }
 
     [ClientRpc]
-    private void Rpc_EventCardRevealed(int player, int cardIndex)
+    private void Rpc_EventCardRevealed(int player, int cardIndexRow, int cardIndexCol)
     {
-        EventCardRevealed(player, cardIndex);
+        EventCardRevealed(player, cardIndexRow, cardIndexCol);
     }
 
     [ClientRpc]
