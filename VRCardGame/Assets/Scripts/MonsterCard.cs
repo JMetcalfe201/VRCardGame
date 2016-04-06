@@ -8,7 +8,7 @@ public class MonsterCard : ICard
     public int rating;
 
     [SerializeField]
-    public bool attackMode = true;
+    public bool attackMode = false;
 
 
     public void SetAttackMode()
