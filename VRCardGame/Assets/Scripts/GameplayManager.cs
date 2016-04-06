@@ -64,7 +64,7 @@ public class GameplayManager : NetworkBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-	
+	    
 	}
 
     public void AdvancePhase()

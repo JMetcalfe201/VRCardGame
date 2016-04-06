@@ -3,10 +3,24 @@ using System.Collections;
 
 public abstract class IEffectCard : ICard
 {
+    bool blocked = false;
+
     //event OnActivate(); Commented out so that it is playable.
     bool CanActivate()
     {
-        return true; //Placeholder
+        if (!blocked)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Block()
+    {
+        blocked = false;
     }
 
     // Use this for initialization

@@ -268,7 +268,7 @@ public class PlayingField : NetworkBehaviour
                 card.SetDefenseMode();
             }
              * */
-
+            
             RpcAddMonsterCard(cardID, attackMode, firstEmpty);
 
             player.gpManager.Cmd_EventCardPlaced(player.playerNumber, 1, firstEmpty);
@@ -280,6 +280,7 @@ public class PlayingField : NetworkBehaviour
     {
         monsterCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.GetPositionAt(1, index), friendlyCardSpawnLocation.transform.rotation) as GameObject;
         MonsterCard card = monsterCards[index].GetComponent<MonsterCard>();
+        card.owner = player;
         card.Placed(true);
         card.SetMonsterModelTransform(modelSpawnGrid.GetPositionAt(1, index), modelSpawnGrid.transform.rotation.eulerAngles);
 
@@ -334,6 +335,7 @@ public class PlayingField : NetworkBehaviour
         effectCards[index] = Instantiate(CardDictionary.singleton.GetPrefabByID(cardID), friendlyCardSpawnLocation.GetPositionAt(0, index), friendlyCardSpawnLocation.transform.rotation) as GameObject;
         ICard card = effectCards[index].GetComponent<ICard>();
         card._3DmonsterModel = Instantiate(effectCards[index].GetComponent<ICard>()._3DmonsterModel, modelSpawnGrid.GetPositionAt(0, index), modelSpawnGrid.transform.rotation) as GameObject;
+        card.owner = player;
 
         if (activate)
         {
@@ -369,7 +371,31 @@ public class PlayingField : NetworkBehaviour
         return true;
     }
 
-    private PlayingField GetOpposingPlayingField()
+    public int GetCardIDByIndex(int row, int col)
+    {
+        if(row == 0)
+        {
+            return effectCards[col].GetComponent<ICard>().cardID;
+        }
+        else
+        {
+            return monsterCards[col].GetComponent<ICard>().cardID;
+        }
+    }
+
+    public GameObject GetCardByIndex(int row, int col)
+    {
+        if(row == 0)
+        {
+            return effectCards[col];
+        }
+        else
+        {
+            return monsterCards[col];
+        }
+    }
+
+    public PlayingField GetOpposingPlayingField()
     {
         return (player.IsFirstPlayer() ? player.gpManager.p2.GetPlayingField() : player.gpManager.p1.GetPlayingField());
     }

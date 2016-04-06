@@ -22,6 +22,8 @@ public abstract class ICard : MonoBehaviour
 
     public bool revealed = false;
 
+    public Player owner;
+
 
     //event OnSummoned; Commented out so it can still be playable.
     //event OnToGraveyard;
@@ -43,7 +45,7 @@ public abstract class ICard : MonoBehaviour
 
     }
 
-    public void Placed(bool onField)
+    public virtual void Placed(bool onField)
     {
         if(onField)
         {

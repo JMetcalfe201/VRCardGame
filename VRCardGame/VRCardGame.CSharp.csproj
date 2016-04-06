@@ -51,29 +51,11 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
@@ -90,6 +72,7 @@
     <Compile Include="Assets\Scripts\CardDictionary.cs" />
     <Compile Include="Assets\Scripts\Deck.cs" />
     <Compile Include="Assets\Scripts\DeckBuilderListPopulation.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\TestTrapCard.cs" />
     <Compile Include="Assets\Scripts\GameplayManager.cs" />
     <Compile Include="Assets\Scripts\GrassRandomizer.cs" />
     <Compile Include="Assets\Scripts\ICard.cs" />
@@ -104,6 +87,7 @@
     <Compile Include="Assets\Scripts\PlaceHolderMenuSystem.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayingField.cs" />
+    <Compile Include="Assets\Scripts\ScoreoboardFanSpin.cs" />
     <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
     <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
     <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
@@ -111,6 +95,7 @@
     <Compile Include="Assets\Scripts\TrapCard.cs" />
     <Compile Include="Assets\Scripts\depriciated\PlayingFieldOneSlot.cs" />
     <Compile Include="Assets\Scripts\depriciated\PlayingField_backup.cs" />
+    <Compile Include="Assets\Scripts\depriciated\PlayingField_syncList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
