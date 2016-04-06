@@ -1,0 +1,155 @@
+Initialize engine version: 5.2.3f1 (f3d16a1fa2dd)
+[VRDevice] Initialization of device oculus failed.
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 675M (ID=0x1212)
+    Vendor:   NVIDIA
+    VRAM:     2000 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\System.Core.dll (this message is harmless)
+- Completed reload, in  0.054 seconds
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: G:\VRCardGame\VRCardGame\Garmin_Pres_Data\Managed\System.dll (this message is harmless)
+[VRDevice] Initialization of device oculus failed.
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: eb0 -> priority: 1 
+  Thread -> id: 1144 -> priority: 1 
+NAT target 0 not connected to NAT facilitator 67.225.180.24:50005
+
+ 
+(Filename:  Line: 813)
+
+Down
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+CRC Local Dump Player : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+CRC Local Dump PlayingField : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+CRC Remote Dump Player : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+CRC Remote Dump PlayingField : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+CRC Remote Dump GameplayManager : 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.758897 ms
+
+Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 586.
+Total: 0.501103 ms (FindLiveObjects: 0.031235 ms CreateObjectMapping: 0.024095 ms MarkObjects: 0.295842 ms  DeleteObjects: 0.149483 ms)
+
+(-7.1, 3.2, 0.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(1.6, 0.7, 4.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 1 played a card in slot 0.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2 (PlayingField)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Deck
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Deck Contents: 3 1 2 2 2 2 1 3 2 3 3 0 0 2 3 0 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2 (PlayingField)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Deck
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Deck Contents: 3 1 2 2 2 2 1 3 2 3 3 0 0 2 3 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+playcard1_test pressed
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+AddingCard: 0 Revealed: True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+AddingCard: 0 Revealed: True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-7.2, 3.2, -0.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-1.6, 0.7, -4.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2 played a card in slot 0.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 1's card in slot 0 was destroyed.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 1 has taken 1500 points of damage.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-7.1, 3.2, 0.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(1.6, 0.7, 4.0)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 1 played a card in slot 0.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 1's card in slot 0 was destroyed.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2's card in slot 0 was destroyed.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+

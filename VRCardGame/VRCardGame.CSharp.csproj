@@ -63,6 +63,18 @@
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -74,30 +86,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script Folder\ICard.cs" />
-    <Compile Include="Assets\Script Folder\IEffectCard.cs" />
-    <Compile Include="Assets\Script Folder\MagicCard.cs" />
-    <Compile Include="Assets\Script Folder\MonsterCard.cs" />
-    <Compile Include="Assets\Script Folder\TrapCard.cs" />
     <Compile Include="Assets\Scripts\AutoKillOneOffParticle.cs" />
     <Compile Include="Assets\Scripts\CardDictionary.cs" />
     <Compile Include="Assets\Scripts\Deck.cs" />
     <Compile Include="Assets\Scripts\DeckBuilderListPopulation.cs" />
     <Compile Include="Assets\Scripts\GameplayManager.cs" />
     <Compile Include="Assets\Scripts\GrassRandomizer.cs" />
+    <Compile Include="Assets\Scripts\ICard.cs" />
+    <Compile Include="Assets\Scripts\IEffectCard.cs" />
+    <Compile Include="Assets\Scripts\MagicCard.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenuNonVRCorrection.cs" />
     <Compile Include="Assets\Scripts\MainMenu\NetworkMenuRelay.cs" />
     <Compile Include="Assets\Scripts\MainMenu\PutIPinTextBox.cs" />
+    <Compile Include="Assets\Scripts\MonsterCard.cs" />
     <Compile Include="Assets\Scripts\NetworkManagerHUD.cs" />
     <Compile Include="Assets\Scripts\PHMenuItem.cs" />
     <Compile Include="Assets\Scripts\PlaceHolderMenuSystem.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayingField.cs" />
-    <Compile Include="Assets\Scripts\PlayingFieldOneSlot.cs" />
     <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
     <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
     <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
     <Compile Include="Assets\Scripts\TransformGrid.cs" />
+    <Compile Include="Assets\Scripts\TrapCard.cs" />
+    <Compile Include="Assets\Scripts\depriciated\PlayingFieldOneSlot.cs" />
+    <Compile Include="Assets\Scripts\depriciated\PlayingField_backup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
