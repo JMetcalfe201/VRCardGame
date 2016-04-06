@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 public class Player : NetworkBehaviour
 {
+    public float mouseLookClampVert = 75f;
+    public float mouseLookClampHoriz = 90f;
+
     [SyncVar]
     private int lifepoints;
 
@@ -106,6 +109,26 @@ public class Player : NetworkBehaviour
 
             transform.eulerAngles = transform.eulerAngles + new Vector3(0f, Input.GetAxis("Mouse X") * lookSensitivity, 0f);
             transform.eulerAngles = transform.eulerAngles + new Vector3(-Input.GetAxis("Mouse Y") * lookSensitivity, 0f, 0f);
+
+            /*
+            if (transform.eulerAngles.y > mouseLookClampHoriz)
+            {
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, mouseLookClampHoriz, transform.eulerAngles.z);
+            }
+            else if (transform.eulerAngles.y < -mouseLookClampHoriz)
+            {
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, -mouseLookClampHoriz, transform.eulerAngles.z);
+            }
+
+            if (transform.eulerAngles.x > mouseLookClampVert)
+            {
+                transform.eulerAngles = new Vector3(mouseLookClampVert, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+            else if (transform.eulerAngles.x < -mouseLookClampVert)
+            {
+                transform.eulerAngles = new Vector3(-mouseLookClampVert, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+             * */
         }
 
         if (Input.GetButtonDown("Advance Phase"))
@@ -180,26 +203,34 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("drawcard_test"))
+        if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
-            Debug.Log(field);
-            Debug.Log(field.getDeck());
-            field.getDeck().print();
-            addCardToHand(field.getDeck().DrawTop());
+            if (Input.GetButtonDown("drawcard_test"))
+            {
+                Debug.Log(field);
+                Debug.Log(field.getDeck());
+                field.getDeck().print();
+                addCardToHand(field.getDeck().DrawTop());
+
+                CmdgpManagerAdvancePhase();
+            }
         }
 
-        if (Input.GetButtonDown("playcard1_test"))
+        if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
-            Debug.Log("playcard1_test pressed");
-            playCard(0);
-        }
-        if (Input.GetButtonDown("playcard2_test"))
-        {
-            playCard(1);
-        }
-        if (Input.GetButtonDown("playcard3_test"))
-        {
-            playCard(2);
+            if (Input.GetButtonDown("playcard1_test"))
+            {
+                Debug.Log("playcard1_test pressed");
+                playCard(0);
+            }
+            if (Input.GetButtonDown("playcard2_test"))
+            {
+                playCard(1);
+            }
+            if (Input.GetButtonDown("playcard3_test"))
+            {
+                playCard(2);
+            }
         }
     }
 

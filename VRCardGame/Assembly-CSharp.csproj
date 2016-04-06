@@ -63,6 +63,7 @@
      <Compile Include="Assets\Scripts\PlaceHolderMenuSystem.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayingField.cs" />
+     <Compile Include="Assets\Scripts\ScoreoboardFanSpin.cs" />
      <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
      <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
@@ -70,6 +71,7 @@
      <Compile Include="Assets\Scripts\TrapCard.cs" />
      <Compile Include="Assets\Scripts\depriciated\PlayingFieldOneSlot.cs" />
      <Compile Include="Assets\Scripts\depriciated\PlayingField_backup.cs" />
+     <Compile Include="Assets\Scripts\depriciated\PlayingField_syncList.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
