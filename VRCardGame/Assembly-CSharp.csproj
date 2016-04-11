@@ -48,7 +48,11 @@
      <Compile Include="Assets\Scripts\AutoKillOneOffParticle.cs" />
      <Compile Include="Assets\Scripts\CardDictionary.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
-     <Compile Include="Assets\Scripts\DeckBuilderListPopulation.cs" />
+     <Compile Include="Assets\Scripts\DeckBuilder\ClickHandler.cs" />
+     <Compile Include="Assets\Scripts\DeckBuilder\CurrentDeckListBuilder.cs" />
+     <Compile Include="Assets\Scripts\DeckBuilder\DeckBuilderListPopulation.cs" />
+     <Compile Include="Assets\Scripts\DeckBuilder\SaveButtonScript.cs" />
+     <Compile Include="Assets\Scripts\EffectCards\TestTrapCard.cs" />
      <Compile Include="Assets\Scripts\GameplayManager.cs" />
      <Compile Include="Assets\Scripts\GrassRandomizer.cs" />
      <Compile Include="Assets\Scripts\ICard.cs" />
@@ -63,7 +67,8 @@
      <Compile Include="Assets\Scripts\PlaceHolderMenuSystem.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayingField.cs" />
-     <Compile Include="Assets\Scripts\ScoreoboardFanSpin.cs" />
+     <Compile Include="Assets\Scripts\Scoreboard.cs" />
+     <Compile Include="Assets\Scripts\ScoreboardFanSpin.cs" />
      <Compile Include="Assets\Scripts\TestScripts\EventsTest.cs" />
      <Compile Include="Assets\Scripts\TestScripts\PlayingFieldTestBench.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
@@ -72,6 +77,7 @@
      <Compile Include="Assets\Scripts\depriciated\PlayingFieldOneSlot.cs" />
      <Compile Include="Assets\Scripts\depriciated\PlayingField_backup.cs" />
      <Compile Include="Assets\Scripts\depriciated\PlayingField_syncList.cs" />
+     <None Include="Assets\Materials\OneSidedText.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>Z:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

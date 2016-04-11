@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScoreoboardFanSpin : MonoBehaviour 
+public class ScoreboardFanSpin : MonoBehaviour 
 {
     public float speed = 5f;
 

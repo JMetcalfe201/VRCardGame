@@ -9,7 +9,7 @@ public class Player : NetworkBehaviour
     public float mouseLookClampVert = 75f;
     public float mouseLookClampHoriz = 90f;
 
-    [SyncVar]
+    [SyncVar(hook = "OnLifePointsChanged")]
     private int lifepoints;
 
     [SyncVar(hook = "firstPlayerUpdated")]
@@ -22,9 +22,6 @@ public class Player : NetworkBehaviour
     private PlayingField field;
     public List<GameObject> hand;
     private Transform handLocation;
-
-    public Text playerText;
-    public Text phaseText;
 
     public int attackingCard;
 
@@ -49,7 +46,7 @@ public class Player : NetworkBehaviour
             Cursor.visible = false;
         }
 
-        lifepoints = 800;
+        lifepoints = 8000;
 
         attackingCard = -1;
 
@@ -64,7 +61,6 @@ public class Player : NetworkBehaviour
         else
         {
             CmdInitPlayer();
-            UpdateUI();
         }
 
         if (playerNumber == 1)
@@ -83,7 +79,7 @@ public class Player : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            if(gpManager.player_1_netID == -1)
+            if (gpManager.player_1_netID == -1)
             {
                 gpManager.player_1_netID = (int)netId.Value;
                 playerNumber = 1;
@@ -124,7 +120,6 @@ public class Player : NetworkBehaviour
             {
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, -mouseLookClampHoriz, transform.eulerAngles.z);
             }
-
             if (transform.eulerAngles.x > mouseLookClampVert)
             {
                 transform.eulerAngles = new Vector3(mouseLookClampVert, transform.eulerAngles.y, transform.eulerAngles.z);
@@ -149,10 +144,10 @@ public class Player : NetworkBehaviour
 
                 CmdgpManagerAdvancePhase();
 
-                if( gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2 )
+                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
                 {
                     selectionIndex = 0;
-                    if(hand[0] != null)
+                    if (hand[0] != null)
                     {
                         hand[0].GetComponent<ParticleSystem>().enableEmission = true;
                     }
@@ -235,7 +230,6 @@ public class Player : NetworkBehaviour
                 Debug.Log(field.getDeck());
                 field.getDeck().print();
                 addCardToHand(field.getDeck().DrawTop());
-
                 CmdgpManagerAdvancePhase();
             }
         }
@@ -347,14 +341,6 @@ public class Player : NetworkBehaviour
 
     //CmdAddCard
 
-    public void UpdateUI()
-    {
-        if (isLocalPlayer)
-        {
-            phaseText.text = "It is player " + (gpManager.GetFirstPlayerTurn() ? 1 : 2) + "'s turn. Phase: " + gpManager.GetCurrentPhase().ToString();
-        }
-    }
-
     [Command]
     private void CmdgpManagerAdvancePhase()
     {
@@ -367,12 +353,33 @@ public class Player : NetworkBehaviour
         {
             lifepoints -= points;
 
-            if(lifepoints <= 0)
+            if (lifepoints <= 0)
             {
-                gpManager.GameOver(this);
+                gpManager.CmdGameOver((int)netId.Value);
             }
 
             gpManager.Cmd_EventPlayerDamaged(playerNumber, points);
+        }
+    }
+
+    private void OnLifePointsChanged(int lp)
+    {
+        if(lp < 0)
+        {
+            lifepoints = 0;
+        }
+        else
+        {
+            lifepoints = lp;
+        }
+
+        if(playerNumber == 2)
+        {
+            gpManager.scoreboard.SetBlueLifePoints(lp);
+        }
+        else
+        {
+            gpManager.scoreboard.SetRedLifePoits(lp);
         }
     }
 
@@ -394,7 +401,6 @@ public class Player : NetworkBehaviour
     private void UpdatePlayerNumInfo()
     {
         gameObject.name = "Player " + playerNumber;
-        playerText.text = "You are player: " + playerNumber;
         transform.eulerAngles = (IsFirstPlayer() ? new Vector3(0, 270f, 0) : new Vector3(0, 90f, 0));
 
         field.InitPlayingField();
@@ -426,10 +432,10 @@ public class Player : NetworkBehaviour
 
     private void fixHandCardPositions(int startIndex)
     {
-        for(int i=startIndex; i<hand.Count; i++)
+        for (int i = startIndex; i < hand.Count; i++)
         {
             Mesh msh = hand[i].GetComponentInChildren<MeshFilter>().mesh;
-            float wid = msh.bounds.size.x * hand[i].GetComponentInChildren<MeshFilter>().transform.lossyScale.z * 11/10;
+            float wid = msh.bounds.size.x * hand[i].GetComponentInChildren<MeshFilter>().transform.lossyScale.z * 11 / 10;
             Vector3 cardPosition = handLocation.position;
             cardPosition.z += i * wid;
             hand[i].transform.position = cardPosition;
@@ -453,7 +459,7 @@ public class Player : NetworkBehaviour
 
     private void drawStartingHand()
     {
-        for(int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
             addCardToHand(field.getDeck().DrawTop());
         }

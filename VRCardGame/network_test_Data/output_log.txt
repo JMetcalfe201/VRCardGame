@@ -16,7 +16,7 @@ Loading Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.UI.dll i
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading Z:\581 Project\VRCardGame\network_test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.049 seconds
+- Completed reload, in  0.046 seconds
 desktop: 2560x1440 59Hz; virtual: 4000x1440 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
@@ -24,44 +24,28 @@ desktop: 2560x1440 59Hz; virtual: 4000x1440 at 0,0
 Platform assembly: Z:\581 Project\VRCardGame\network_test_Data\Managed\System.dll (this message is harmless)
 [VRDevice] Initialization of device oculus failed.
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 1b00 -> priority: 1 
-  Thread -> id: 5040 -> priority: 1 
+  Thread -> id: 6414 -> priority: 1 
+  Thread -> id: 3030 -> priority: 1 
 NAT target 0 not connected to NAT facilitator 67.225.180.24:50005
 
  
 (Filename:  Line: 813)
 
-Down
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
-CRC Local Dump Player : 0
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
-CRC Local Dump PlayingField : 0
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
-CRC Remote Dump PlayingField : 0
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
-CRC Remote Dump Player : 0
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
-CRC Remote Dump GameplayManager : 0
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
-
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 7.229485 ms
+UnloadTime: 5.479014 ms
 
-Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 587.
-Total: 0.617298 ms (FindLiveObjects: 0.063691 ms CreateObjectMapping: 0.037128 ms MarkObjects: 0.336872 ms  DeleteObjects: 0.178699 ms)
+Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 2726.
+Total: 0.626656 ms (FindLiveObjects: 0.111083 ms CreateObjectMapping: 0.060673 ms MarkObjects: 0.313026 ms  DeleteObjects: 0.141571 ms)
 
-(-7.1, 3.2, 0.2)
+AddingCard: 0 Revealed: True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+AddingCard: 0 Revealed: True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(7.2, 3.2, 0.2)
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
 
@@ -72,4 +56,39 @@ Total: 0.617298 ms (FindLiveObjects: 0.063691 ms CreateObjectMapping: 0.037128 m
 Player 1 played a card in slot 0.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(7.1, 3.2, -0.2)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+(-1.6, 0.7, -4.1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2 played a card in slot 0.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Blue Player is the winner!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+Player 2's card in slot 0 was destroyed.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 64)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at PlayingField.RpcDestroyMonsterCard (Int32 index) [0x00000] in <filename unknown>:0 
+  at PlayingField.InvokeRpcRpcDestroyMonsterCard (UnityEngine.Networking.NetworkBehaviour obj, UnityEngine.Networking.NetworkReader reader) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkBehaviour.InvokeRpcDelegate (Int32 cmdHash, UnityEngine.Networking.NetworkReader reader) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkBehaviour.InvokeRPC (Int32 cmdHash, UnityEngine.Networking.NetworkReader reader) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkIdentity.HandleRPC (Int32 cmdHash, UnityEngine.Networking.NetworkReader reader) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.ClientScene.OnRPCMessage (UnityEngine.Networking.NetworkMessage netMsg) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkConnection.InvokeHandler (UnityEngine.Networking.NetworkMessage netMsg) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.LocalClient.ProcessInternalMessages () [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.LocalClient.Update () [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkClient.UpdateClients () [0x00000] in <filename unknown>:0 
+  at UnityEngine.Networking.NetworkIdentity.UNetStaticUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
 

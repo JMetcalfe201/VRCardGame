@@ -28,6 +28,8 @@ public class GameplayManager : NetworkBehaviour
     public Player p1;
     public Player p2;
 
+    public Scoreboard scoreboard;
+
     public static GameplayManager singleton = null;
 
     // Events
@@ -59,6 +61,9 @@ public class GameplayManager : NetworkBehaviour
     {
         currentPhase = EGamePhase.DrawPhase;
         firstPlayersTurn = true;
+
+        scoreboard.SetPhaseText(currentPhase.ToString());
+        scoreboard.SetTurn(1);
 	}
 	
 	// Update is called once per frame
@@ -88,31 +93,26 @@ public class GameplayManager : NetworkBehaviour
     {
         currentPhase = newPhase;
 
-        foreach(Player p in GameObject.FindObjectsOfType<Player>())
-        {
-            if(p.isLocalPlayer)
-            {
-                p.UpdateUI();
-            }
-        }
+        scoreboard.SetPhaseText(currentPhase.ToString());
     }
 
-    public void GameOver(Player winner)
+    [Command]
+    public void CmdGameOver(int winnerNetID)
     {
-        Debug.LogError(winner.playerText.text + " is the winner!");
+        RpcGameOver((winnerNetID == player_1_netID ? 1 : 2));
+    }
+
+    [ClientRpc]
+    private void RpcGameOver(int playerIndex)
+    {
+        Debug.LogError((playerIndex == 1 ? "Red" : "Blue") + " Player is the winner!");
     }
 
     private void OnFirstPlayersTurnChange(bool newTurn)
     {
         firstPlayersTurn = newTurn;
 
-        foreach (Player p in GameObject.FindObjectsOfType<Player>())
-        {
-            if (p.isLocalPlayer)
-            {
-                p.UpdateUI();
-            }
-        }
+        scoreboard.SetTurn((firstPlayersTurn ? 1 : 2));
     }
 
     public EGamePhase GetCurrentPhase()
