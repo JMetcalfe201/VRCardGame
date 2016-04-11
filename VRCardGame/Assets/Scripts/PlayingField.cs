@@ -24,7 +24,7 @@ public class PlayingField : NetworkBehaviour
     private Deck graveyard;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         monsterCards = new GameObject[5];
         effectCards = new GameObject[monsterCards.Length];
@@ -403,5 +403,18 @@ public class PlayingField : NetworkBehaviour
     public Deck getDeck()
     {
         return playerDeck;
+    }
+
+    public List<int> getMonsterIndices()
+    {
+        List<int> indices = new List<int>();
+        for (int i = 0; i < 5; i++)
+        {
+            if(monsterCards[i] != null)
+            {
+                indices.Add(i);
+            }
+        }
+        return indices;
     }
 }

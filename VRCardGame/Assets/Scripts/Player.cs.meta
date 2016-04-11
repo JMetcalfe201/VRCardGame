@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 93104aa0c569e1c4ca2e03e6db5f5ee1
-timeCreated: 1446432337
+timeCreated: 1460345532
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gpManager: {instanceID: 0}
+  - playerText: {instanceID: 0}
+  - phaseText: {instanceID: 0}
+  - selectionIndicator: {fileID: 167034, guid: 036e86cc6bd287d42b9c9a793041ef01, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

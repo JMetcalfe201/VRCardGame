@@ -29,6 +29,8 @@ public class Player : NetworkBehaviour
     public int attackingCard;
 
     public int selectionIndex;
+    private bool vAxisInUse;
+    private bool hAxisInUse;
 
     void Awake()
     {
@@ -36,6 +38,8 @@ public class Player : NetworkBehaviour
         gpManager = GameObject.Find("GameplayManager").GetComponent<GameplayManager>();
         field = GetComponent<PlayingField>();
         hand = new List<GameObject>();
+        vAxisInUse = false;
+        hAxisInUse = false;
     }
 
     void Start()
@@ -71,6 +75,7 @@ public class Player : NetworkBehaviour
         {
             gpManager.p2 = this;
         }
+        drawStartingHand();
     }
 
     [Command]
@@ -136,20 +141,39 @@ public class Player : NetworkBehaviour
 
             if ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer()))
             {
+                if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase)
+                {
+                    addCardToHand(field.getDeck().DrawTop());
+                }
+                hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+
                 CmdgpManagerAdvancePhase();
+
+                if( gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2 )
+                {
+                    selectionIndex = 0;
+                    if(hand[0] != null)
+                    {
+                        hand[0].GetComponent<ParticleSystem>().enableEmission = true;
+                    }
+                    else
+                    {
+                        // no cards in hand, player loses?
+                    }
+                }
             }
         }
 
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
-            if(attackingCard == -1)
+            if (attackingCard == -1)
             {
-                if(Input.GetKeyDown(KeyCode.Alpha1))
+                if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
                     attackingCard = 0;
                 }
 
-                if(Input.GetKeyDown(KeyCode.Alpha2))
+                if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
                     attackingCard = 1;
                 }
@@ -202,7 +226,7 @@ public class Player : NetworkBehaviour
                 }
             }
         }
-
+        /*
         if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
             if (Input.GetButtonDown("drawcard_test"))
@@ -215,24 +239,111 @@ public class Player : NetworkBehaviour
                 CmdgpManagerAdvancePhase();
             }
         }
-
-        if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+        */
+        if (isPlayersTurn())
         {
-            if (Input.GetButtonDown("playcard1_test"))
+            float v = Input.GetAxisRaw("Menu Vertical");
+            float h = Input.GetAxisRaw("Menu Horizontal");
+
+            if ((h > 0.5 || h < -0.5) && !hAxisInUse)
             {
-                Debug.Log("playcard1_test pressed");
-                playCard(0);
+                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
+                {
+                    if (h > 0)
+                    {
+                        if (hand.Count != 0)
+                        {
+                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                            selectionIndex = (selectionIndex + 1) % hand.Count;
+                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+                        }
+                        else
+                            Debug.Log("No cards in hand");
+                    }
+                    else
+                    {
+                        if (hand.Count != 0)
+                        {
+                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                            selectionIndex = (selectionIndex - 1 + hand.Count) % hand.Count;
+                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+                        }
+                        else
+                            Debug.Log("No cards in hand");
+                    }
+                }
+                else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
+                {
+                    List<int> monsterIndices = field.getMonsterIndices();
+                    if (monsterIndices.Count > 0)
+                    {
+                        if (h > 0)
+                        {
+                            Debug.Log("There are monsters on field");
+                            // do stuff...
+                        }
+                        else
+                        {
+                            Debug.Log("There are monsters on field");
+                            // do stuff...
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("No monsters on field");
+                    }
+                }
+
+                Debug.Log("Selection Index: " + selectionIndex);
+                hAxisInUse = true;
             }
-            if (Input.GetButtonDown("playcard2_test"))
+            else if (h < 0.5 && h > -0.5)
             {
-                playCard(1);
+                hAxisInUse = false;
             }
-            if (Input.GetButtonDown("playcard3_test"))
+
+            if (Input.GetButtonDown("Select"))
             {
-                playCard(2);
+                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
+                {
+                    if (hand.Count != 0)
+                        playCard(selectionIndex);
+                    else
+                        Debug.Log("No cards in hand");
+
+                    CmdgpManagerAdvancePhase();
+                }
+                /*
+                else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
+                {
+                    attackingCard = selectionIndex;
+                    field.Attack(attackingCard, insert_index_to_attack_here);
+                }
+                */
+            }
+
+            if ((v > 0.5 || v < -0.5) && !vAxisInUse)
+            {
+                if (v > 0)
+                {
+
+                    Debug.Log("Up");
+                }
+                else
+                {
+
+                    Debug.Log("Down");
+                }
+
+                vAxisInUse = true;
+            }
+            else if (v < 0.5 && v > -0.5)
+            {
+                vAxisInUse = false;
             }
         }
-    }
+
+    } // End handleInput()
 
     //CmdAddCard
 
@@ -318,7 +429,7 @@ public class Player : NetworkBehaviour
         for(int i=startIndex; i<hand.Count; i++)
         {
             Mesh msh = hand[i].GetComponentInChildren<MeshFilter>().mesh;
-            float wid = msh.bounds.size.x * hand[i].GetComponentInChildren<MeshFilter>().transform.lossyScale.z;
+            float wid = msh.bounds.size.x * hand[i].GetComponentInChildren<MeshFilter>().transform.lossyScale.z * 11/10;
             Vector3 cardPosition = handLocation.position;
             cardPosition.z += i * wid;
             hand[i].transform.position = cardPosition;
@@ -333,5 +444,18 @@ public class Player : NetworkBehaviour
     public PlayingField GetPlayingField()
     {
         return field;
+    }
+
+    private bool isPlayersTurn()
+    {
+        return (gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer());
+    }
+
+    private void drawStartingHand()
+    {
+        for(int i=0; i<4; i++)
+        {
+            addCardToHand(field.getDeck().DrawTop());
+        }
     }
 }
