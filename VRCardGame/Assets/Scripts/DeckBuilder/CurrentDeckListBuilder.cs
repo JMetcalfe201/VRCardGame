@@ -11,14 +11,16 @@ public class CurrentDeckListBuilder : MonoBehaviour
     ScrollRect scrollrect;
     GameObject viewport;
     GameObject content;
-    bool listMover = true; //True means right, false means left.
 
-    CardDictionary deck;
+    bool listMover = true; //True means right, false means left.
+    //int selectedItem = 2;
+
+    DeckInProgressScript deck;
 
     // Use this for initialization
     void Start()
     {
-        deck = GameObject.Find("DeckInProgress").GetComponent<CardDictionary>(); //CardDictionary is a misnomer here, it's just a script containing a list.
+        deck = GameObject.Find("DeckInProgress").GetComponent<DeckInProgressScript>();
 
         GameObject tmplist = GameObject.Find("CurrentDeck");
         scrollrect = tmplist.GetComponent<ScrollRect>();
@@ -41,6 +43,10 @@ public class CurrentDeckListBuilder : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) //Probably more efficient with an event callback?
             {
+                if (deck.selectedItem > 0)
+                {
+                    deck.selectedItem--;
+                }
                 if (scrollTracker == 0)
                 {
                     scrollrect.velocity = new Vector2(0, -500);
@@ -63,11 +69,19 @@ public class CurrentDeckListBuilder : MonoBehaviour
                     fastTracker = 4;
                     scrollrect.velocity = new Vector2(0, -500);
                     scrollTracker = 0;
+                    if (deck.selectedItem > 0)
+                    {
+                        deck.selectedItem--;
+                    }
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                if (deck.selectedItem < deck.cardList.Count - 1)
+                {
+                    deck.selectedItem++;
+                }
                 if (scrollTracker == 9)
                 {
                     scrollrect.velocity = new Vector2(0, 500);
@@ -90,6 +104,10 @@ public class CurrentDeckListBuilder : MonoBehaviour
                     fastTracker = 86;
                     scrollrect.velocity = new Vector2(0, 500);
                     scrollTracker = 9;
+                    if (deck.selectedItem < deck.cardList.Count - 1)
+                    {
+                        deck.selectedItem++;
+                    }
                 }
             }
 
@@ -99,39 +117,59 @@ public class CurrentDeckListBuilder : MonoBehaviour
                 listMover = true;
             }
 
+            //Redundent, but it covers the case where the highlighted element falls off screen.
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                if (deck.cardList.Count > deck.selectedItem)
+                {
+                    GameObject tmp = deck.cardList[deck.selectedItem];
+                    Button tmpButton = tmp.GetComponent<Button>();
+                    tmpButton.Select();
+                }
+                else if (deck.cardList.Count > 1)
+                {
+                    deck.selectedItem = 1;
+                    GameObject tmp = deck.cardList[deck.selectedItem];
+                    Button tmpButton = tmp.GetComponent<Button>();
+                    tmpButton.Select();
+                }
+                else if (deck.cardList.Count > 0)
+                {
+                    deck.selectedItem = 0;
+                    GameObject tmp = deck.cardList[deck.selectedItem];
+                    Button tmpButton = tmp.GetComponent<Button>();
+                    tmpButton.Select();
+                }
+            }
+
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if (deck.cardList.Count > 2)
+            //Ideally they'll have 3 elements in their deck before they push left, and it'll go to the third element.
+            //If they don't, these other cases cover moving it to element 2 or 1.
+            if (deck.cardList.Count > deck.selectedItem)
             {
                 listMover = false;
-                scrollrect.velocity = new Vector2(0, -20000);
-                scrollTracker = 0;
-                fastTracker = 0;
 
-                GameObject tmp = deck.cardList[2];
+                GameObject tmp = deck.cardList[deck.selectedItem];
                 Button tmpButton = tmp.GetComponent<Button>();
                 tmpButton.Select();
             }
             else if (deck.cardList.Count > 1)
             {
                 listMover = false;
-                scrollrect.velocity = new Vector2(0, -20000);
-                scrollTracker = 0;
-                fastTracker = 0;
 
-                GameObject tmp = deck.cardList[1];
+                deck.selectedItem = 1;
+                GameObject tmp = deck.cardList[deck.selectedItem];
                 Button tmpButton = tmp.GetComponent<Button>();
                 tmpButton.Select();
             }
             else if (deck.cardList.Count > 0)
             {
                 listMover = false;
-                scrollrect.velocity = new Vector2(0, -20000);
-                scrollTracker = 0;
-                fastTracker = 0;
 
-                GameObject tmp = deck.cardList[0];
+                deck.selectedItem = 0;
+                GameObject tmp = deck.cardList[deck.selectedItem];
                 Button tmpButton = tmp.GetComponent<Button>();
                 tmpButton.Select();
             }

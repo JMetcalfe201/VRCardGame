@@ -6,7 +6,7 @@ public class ClickHandler : MonoBehaviour
 {
 
     public GameObject buttonPrefab;
-    CardDictionary deck;
+    DeckInProgressScript deck;
 
     int deckIncrementer = 30;
     GameObject deckViewport;
@@ -17,7 +17,8 @@ public class ClickHandler : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        deck = GameObject.Find("DeckInProgress").GetComponent<CardDictionary>(); //CardDictionary is a misnomer here, it's just a script containing a list.
+
+        deck = GameObject.Find("DeckInProgress").GetComponent<DeckInProgressScript>();
 
         GameObject tmplist = GameObject.Find("CurrentDeck");
 
@@ -59,6 +60,8 @@ public class ClickHandler : MonoBehaviour
         bool found = false;
         int index = 0;
         int cardIndex = 0;
+
+        //This foreach loop moves the items reorders the items in the list when one is removed.
         foreach (GameObject g in deck.cardList)
         {
             if (g == gameObject)
@@ -85,6 +88,7 @@ public class ClickHandler : MonoBehaviour
         }
         else if (deck.cardList.Count > cardIndex - 1 && deck.cardList.Count > 0)
         {
+            deck.selectedItem--;
             GameObject tmp = deck.cardList[cardIndex - 1];
             Button tmpButton = tmp.GetComponent<Button>();
             tmpButton.Select();

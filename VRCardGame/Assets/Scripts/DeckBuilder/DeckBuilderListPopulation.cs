@@ -15,6 +15,7 @@ public class DeckBuilderListPopulation : MonoBehaviour
     GameObject cardDictionaryViewport;
     GameObject cardDictionaryContent;
     bool listMover = true; //True means right, false means left.
+    int selectedItem = 2; //Start with the third item in the list. Keeps track of the position of highlighted item.
 
     CardDictionary listItemContainer;
 
@@ -53,7 +54,7 @@ public class DeckBuilderListPopulation : MonoBehaviour
             listItemContainer.cardList.Add(listItem);
         }
 
-        GameObject tmp = listItemContainer.cardList[2];
+        GameObject tmp = listItemContainer.cardList[selectedItem];
         Button tmpButton = tmp.GetComponent<Button>();
         tmpButton.Select();
 
@@ -67,6 +68,10 @@ public class DeckBuilderListPopulation : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) //Probably more efficient with an event callback?
             {
+                if (selectedItem > 0)
+                {
+                    selectedItem--;
+                }
                 if (cardDictionaryScrollTracker == 0)
                 {
                     cardDictionaryScrollrect.velocity = new Vector2(0, -500);
@@ -89,11 +94,19 @@ public class DeckBuilderListPopulation : MonoBehaviour
                     cardDictionaryFastTracker = 4;
                     cardDictionaryScrollrect.velocity = new Vector2(0, -500);
                     cardDictionaryScrollTracker = 0;
+                    if (selectedItem > 0)
+                    {
+                        selectedItem--;
+                    }
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                if (selectedItem < listItemContainer.cardList.Count - 1)
+                {
+                    selectedItem++;
+                }
                 if (cardDictionaryScrollTracker == 9)
                 {
                     cardDictionaryScrollrect.velocity = new Vector2(0, 500);
@@ -116,6 +129,10 @@ public class DeckBuilderListPopulation : MonoBehaviour
                     cardDictionaryFastTracker = 86;
                     cardDictionaryScrollrect.velocity = new Vector2(0, 500);
                     cardDictionaryScrollTracker = 9;
+                    if (selectedItem < listItemContainer.cardList.Count - 1)
+                    {
+                        selectedItem++;
+                    }
                 }
             }
 
@@ -124,15 +141,20 @@ public class DeckBuilderListPopulation : MonoBehaviour
                 listMover = false;
             }
 
+            //Redundent, but sometimes useful if we lose track of the scroller.
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                GameObject tmp = listItemContainer.cardList[selectedItem];
+                Button tmpButton = tmp.GetComponent<Button>();
+                tmpButton.Select();
+            }
+
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             listMover = true;
-            cardDictionaryScrollrect.velocity = new Vector2(0, -10000);
-            cardDictionaryScrollTracker = 0;
-            cardDictionaryFastTracker = 0;
 
-            GameObject tmp = listItemContainer.cardList[2];
+            GameObject tmp = listItemContainer.cardList[selectedItem];
             Button tmpButton = tmp.GetComponent<Button>();
             tmpButton.Select();
         }
