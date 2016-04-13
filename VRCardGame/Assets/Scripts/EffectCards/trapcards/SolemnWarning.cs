@@ -59,6 +59,7 @@ public class SolemnWarning : IEffectCard {
 
 
 			}
+			owner.GetPlayingField ().DestroyCard (this);
 		}
 	}
 }

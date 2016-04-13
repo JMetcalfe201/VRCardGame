@@ -342,7 +342,7 @@ public class Player : NetworkBehaviour
     //CmdAddCard
 
     [Command]
-    private void CmdgpManagerAdvancePhase()
+    public void CmdgpManagerAdvancePhase()
     {
         gpManager.AdvancePhase();
     }

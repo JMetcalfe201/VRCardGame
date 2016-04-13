@@ -44,8 +44,12 @@ public class TrapHole : IEffectCard
 				// Delete the monster cards from opponent's playing field
 				
 					owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
+					owner.GetPlayingField ().DestroyCard (this);
+
 				}
+
 			}
 		}
 	}
+
 }

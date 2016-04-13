@@ -58,6 +58,7 @@ public class SolemnJudgement : IEffectCard {
 					owner.TakeLifePointsDamage (owner.lifepoints / 2);
 
 			}
+			owner.GetPlayingField ().DestroyCard (this);
 		}
 	}
 }

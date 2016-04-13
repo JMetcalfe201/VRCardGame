@@ -6,7 +6,7 @@ public abstract class IEffectCard : ICard
     bool blocked = false;
 
     //event OnActivate(); Commented out so that it is playable.
-    bool CanActivate()
+    public virtual bool CanActivate()
     {
         if (!blocked)
         {
