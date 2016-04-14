@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
     CardInfoPane cardInfoPane;
 
     [SyncVar(hook = "OnLifePointsChanged")]
-    private int lifepoints;
+    public int lifepoints;
 
     [SyncVar(hook = "firstPlayerUpdated")]
     public int playerNumber;
