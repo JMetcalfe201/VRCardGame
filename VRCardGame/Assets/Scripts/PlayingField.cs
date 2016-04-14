@@ -41,7 +41,7 @@ public class PlayingField : NetworkBehaviour
         // add some sort of load deck contents by integer
         for (int i = 0; i < 15; i++)
         {
-            playerDeck.addCardTop(Random.Range(0, 4));
+            playerDeck.addCardTop(Random.Range(0, CardDictionary.singleton.cardList.Count));
         }
         playerDeck.Shuffle();
     }

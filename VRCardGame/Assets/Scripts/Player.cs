@@ -9,6 +9,11 @@ public class Player : NetworkBehaviour
     public float mouseLookClampVert = 75f;
     public float mouseLookClampHoriz = 90f;
 
+    public GameObject playerCam;
+
+    [SerializeField]
+    CardInfoPane cardInfoPane;
+
     [SyncVar(hook = "OnLifePointsChanged")]
     private int lifepoints;
 
@@ -46,15 +51,17 @@ public class Player : NetworkBehaviour
             Cursor.visible = false;
         }
 
+        gpManager.EventPhaseChanged += OnPhaseChanged;
+
         lifepoints = 8000;
 
         attackingCard = -1;
 
         if (!isLocalPlayer)
         {
-            GetComponent<AudioListener>().enabled = false;
-            GetComponent<Camera>().tag = "Untagged";
-            GetComponent<Camera>().enabled = false;
+            playerCam.GetComponent<AudioListener>().enabled = false;
+            playerCam.GetComponent<Camera>().tag = "Untagged";
+            playerCam.GetComponent<Camera>().enabled = false;
 
             UpdatePlayerNumInfo();
         }
@@ -62,6 +69,8 @@ public class Player : NetworkBehaviour
         {
             CmdInitPlayer();
         }
+
+        cardInfoPane.TurnOff();
 
         if (playerNumber == 1)
         {
@@ -108,8 +117,8 @@ public class Player : NetworkBehaviour
         {
             float lookSensitivity = 5.0f;
 
-            transform.eulerAngles = transform.eulerAngles + new Vector3(0f, Input.GetAxis("Mouse X") * lookSensitivity, 0f);
-            transform.eulerAngles = transform.eulerAngles + new Vector3(-Input.GetAxis("Mouse Y") * lookSensitivity, 0f, 0f);
+            playerCam.transform.localEulerAngles = playerCam.transform.localEulerAngles + new Vector3(0f, Input.GetAxis("Mouse X") * lookSensitivity, 0f);
+            playerCam.transform.localEulerAngles = playerCam.transform.localEulerAngles + new Vector3(-Input.GetAxis("Mouse Y") * lookSensitivity, 0f, 0f);
 
             /*
             if (transform.eulerAngles.y > mouseLookClampHoriz)
@@ -133,7 +142,14 @@ public class Player : NetworkBehaviour
 
         if (Input.GetButtonDown("Advance Phase"))
         {
+            if ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer()))
+            {
+                CmdgpManagerAdvancePhase();
+            }
 
+            //////////////////////
+            /// Moved this stuff to "OnPhaseChanged" event below. Because of the networking gpManager.GetCurrentPhase() might not be correct right after calling CmdgpManagerAdvancePhase() since it must update over the network. Using an event make sure it isnt called until after the update is done
+            /*
             if ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer()))
             {
                 if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase)
@@ -146,6 +162,16 @@ public class Player : NetworkBehaviour
 
                 if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
                 {
+                    if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
+                    {
+                        cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
+                    }
+                    else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
+                    {
+                        cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
+                    }
+                    cardInfoPane.TurnOn();
+
                     selectionIndex = 0;
                     if (hand[0] != null)
                     {
@@ -156,7 +182,9 @@ public class Player : NetworkBehaviour
                         // no cards in hand, player loses?
                     }
                 }
+
             }
+             */
         }
 
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
@@ -250,6 +278,16 @@ public class Player : NetworkBehaviour
                             hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
                             selectionIndex = (selectionIndex + 1) % hand.Count;
                             hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                            if(hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
+                            {
+                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
+                            }
+                            else if(hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
+                            {
+                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
+                            }
+
                         }
                         else
                             Debug.Log("No cards in hand");
@@ -261,6 +299,15 @@ public class Player : NetworkBehaviour
                             hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
                             selectionIndex = (selectionIndex - 1 + hand.Count) % hand.Count;
                             hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                            if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
+                            {
+                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
+                            }
+                            else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
+                            {
+                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
+                            }
                         }
                         else
                             Debug.Log("No cards in hand");
@@ -338,6 +385,43 @@ public class Player : NetworkBehaviour
         }
 
     } // End handleInput()
+
+    private void OnPhaseChanged(int player, EGamePhase phase)
+    {
+        if (phase == EGamePhase.MainPhase1 && player == playerNumber)
+        {
+            addCardToHand(field.getDeck().DrawTop());
+
+            StartCoroutine(cardInfoPane.FadeIn());
+        }
+
+        if((phase == EGamePhase.MainPhase1 || phase == EGamePhase.MainPhase2) && player == playerNumber)
+        {
+            selectionIndex = 0;
+            if (hand[0] != null)
+            {
+                hand[0].GetComponent<ParticleSystem>().enableEmission = true;
+
+                if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
+                {
+                    cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
+                }
+                else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
+                {
+                    cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
+                }
+            }
+            else
+            {
+                // no cards in hand, player loses?
+            }
+        }
+
+        if (phase == EGamePhase.EndPhase && ((player == 1 && IsFirstPlayer()) || (player != 1 && !IsFirstPlayer())))
+        {
+            StartCoroutine(cardInfoPane.FadeOut());
+        }
+    }
 
     //CmdAddCard
 
