@@ -8,7 +8,7 @@ public class DeckBuilderListPopulation : MonoBehaviour
 
     CardDictionary dictionary;
     public GameObject listItemPrefab;
-    int cardDictionaryIncrementer = 30;
+    int cardDictionaryIncrementer = 1;
     public int cardDictionaryScrollTracker = 0; //For pressing the key down.
     public int cardDictionaryFastTracker = 0; //For holding the key down.
     ScrollRect cardDictionaryScrollrect;
@@ -22,7 +22,6 @@ public class DeckBuilderListPopulation : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
         dictionary = GameObject.Find("CardDictionary").GetComponent<CardDictionary>();
         listItemContainer = GameObject.Find("ListItemContainer").GetComponent<CardDictionary>();
 
@@ -48,8 +47,8 @@ public class DeckBuilderListPopulation : MonoBehaviour
             listItemRect.SetParent(cardDictionaryContent.transform as RectTransform);
             listItemRect.sizeDelta = new Vector2((cardDictionaryContent.transform as RectTransform).rect.width, listItemRect.rect.height);
             listItemRect.FindChild("Text").GetComponent<Text>().text = g.GetComponent<ICard>().cardName;
-            listItemRect.anchoredPosition = new Vector2(0, (cardDictionaryContent.transform as RectTransform).rect.height / 2 - cardDictionaryIncrementer);
-            cardDictionaryIncrementer += 30;
+            listItemRect.anchoredPosition = new Vector2(0, (cardDictionaryContent.transform as RectTransform).rect.height / 2 - ((listItemPrefab.transform as RectTransform).rect.height * cardDictionaryIncrementer));
+            cardDictionaryIncrementer++;
 
             listItemContainer.cardList.Add(listItem);
         }

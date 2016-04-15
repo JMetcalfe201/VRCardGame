@@ -58,6 +58,12 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -65,13 +71,18 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AutoKillOneOffParticle.cs" />
     <Compile Include="Assets\Scripts\CardDictionary.cs" />
+    <Compile Include="Assets\Scripts\CardInfoPane.cs" />
     <Compile Include="Assets\Scripts\Deck.cs" />
     <Compile Include="Assets\Scripts\DeckBuilder\ClickHandler.cs" />
     <Compile Include="Assets\Scripts\DeckBuilder\CurrentDeckListBuilder.cs" />
     <Compile Include="Assets\Scripts\DeckBuilder\DeckBuilderListPopulation.cs" />
     <Compile Include="Assets\Scripts\DeckBuilder\DeckInProgressScript.cs" />
     <Compile Include="Assets\Scripts\DeckBuilder\SaveButtonScript.cs" />
-    <Compile Include="Assets\Scripts\EffectCards\TestTrapCard.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\trapcards\SevenToolsOfBandit.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\trapcards\SolemnJudgement.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\trapcards\SolemnWarning.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\trapcards\TestTrapCard.cs" />
+    <Compile Include="Assets\Scripts\EffectCards\trapcards\TrapHole.cs" />
     <Compile Include="Assets\Scripts\GameplayManager.cs" />
     <Compile Include="Assets\Scripts\GrassRandomizer.cs" />
     <Compile Include="Assets\Scripts\ICard.cs" />
@@ -93,6 +104,7 @@
     <Compile Include="Assets\Scripts\TestScripts\TransfromGridTest.cs" />
     <Compile Include="Assets\Scripts\TransformGrid.cs" />
     <Compile Include="Assets\Scripts\TrapCard.cs" />
+    <Compile Include="Assets\Scripts\UFO_Effect.cs" />
     <Compile Include="Assets\Scripts\depriciated\PlayingFieldOneSlot.cs" />
     <Compile Include="Assets\Scripts\depriciated\PlayingField_backup.cs" />
     <Compile Include="Assets\Scripts\depriciated\PlayingField_syncList.cs" />
