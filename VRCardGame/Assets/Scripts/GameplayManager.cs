@@ -35,11 +35,13 @@ public class GameplayManager : NetworkBehaviour
     // Events
     public delegate void FieldEventDelegate(int player, int cardIndexRow, int cardIndexCol);
     public delegate void PlayerEventDelegate(int player, int lifepointDamage);
+    public delegate void PhaseChangeDelegate(int playerTurn, EGamePhase phase);
 
     public event FieldEventDelegate EventCardPlaced;
     public event FieldEventDelegate EventCardDestroyed;
     public event FieldEventDelegate EventCardRevealed;
     public event PlayerEventDelegate EventPlayerDamaged;
+    public event PhaseChangeDelegate EventPhaseChanged;
 
     void Awake()
     {
@@ -72,6 +74,7 @@ public class GameplayManager : NetworkBehaviour
 	    
 	}
 
+    [Server]
     public void AdvancePhase()
     {
         if(hasAuthority)
@@ -85,6 +88,8 @@ public class GameplayManager : NetworkBehaviour
                 firstPlayersTurn = !firstPlayersTurn;
                 currentPhase = EGamePhase.DrawPhase;
             }
+
+            Cmd_EventPhaseChanged((firstPlayersTurn ? 1 : 2), currentPhase);
         }
     }
 
@@ -153,6 +158,18 @@ public class GameplayManager : NetworkBehaviour
     public void Cmd_EventPlayerDamaged(int player, int lifepointDamage)
     {
         Rpc_EventPlayerDamaged(player, lifepointDamage);
+    }
+
+    [Command]
+    public void Cmd_EventPhaseChanged(int player, EGamePhase phase)
+    {
+        Rpc_EventPhaseChanged(player, phase);
+    }
+
+    [ClientRpc]
+    private void Rpc_EventPhaseChanged(int player, EGamePhase phase)
+    {
+        EventPhaseChanged(player, phase);
     }
 
     [ClientRpc]
