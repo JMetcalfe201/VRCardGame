@@ -18,7 +18,7 @@ public class PlayingField : NetworkBehaviour
 
     public GameObject dieEffectPrefab;
 
-    private Player player;
+    public Player player;
 
     private Deck playerDeck;
     private Deck graveyard;
@@ -76,6 +76,7 @@ public class PlayingField : NetworkBehaviour
             }
         }
     }
+
 
     [Command]
     private void CmdAttack(int myIndex, int opponentIndex)

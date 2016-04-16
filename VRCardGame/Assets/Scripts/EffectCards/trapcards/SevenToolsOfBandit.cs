@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SevenToolsOfBandit : IEffectCard
+public class SevenToolsOfBandit : IEffectCard  //block a trap card and take 1000 lp damage
 {
 
 	// Use this for initialization
@@ -43,12 +43,13 @@ public class SevenToolsOfBandit : IEffectCard
 
 
 				// If the card is revlead (activiated)
-				if (card.revealed)//should check if the owner wants to block it
+				if (card.revealed)
 				{
 					if (card.cardtype == ECardType.TRAP_CARD) {
 						// Call block
-						card.Block ();
+						card.Block ();//should destroy the trap card
 						owner.TakeLifePointsDamage (1000);
+						owner.GetPlayingField ().DestroyCard (this);
 					}
 				}
 			}

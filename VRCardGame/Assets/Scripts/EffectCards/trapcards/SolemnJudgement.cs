@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SolemnJudgement : IEffectCard {
+public class SolemnJudgement : IEffectCard {//destroy a placed card from opponent and take half lp damage
 
 	// Use this for initialization
 	void Start()
@@ -45,6 +45,7 @@ public class SolemnJudgement : IEffectCard {
 					// Call block
 					card.Block();
 					owner.TakeLifePointsDamage (owner.lifepoints / 2);
+					owner.GetPlayingField ().DestroyCard (this);
 				}
 			}
 			else
@@ -56,9 +57,10 @@ public class SolemnJudgement : IEffectCard {
 
 					owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
 					owner.TakeLifePointsDamage (owner.lifepoints / 2);
+					owner.GetPlayingField ().DestroyCard (this);
 
 			}
-			owner.GetPlayingField ().DestroyCard (this);
+
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SolemnWarning : IEffectCard {
+public class SolemnWarning : IEffectCard { //destroy a card placed from opponent and take 2000 lp damage
 
 	// Use this for initialization
 	void Start()
@@ -45,6 +45,7 @@ public class SolemnWarning : IEffectCard {
 					// Call block
 					owner.TakeLifePointsDamage (2000);
 					card.Block();
+					owner.GetPlayingField ().DestroyCard (this);
 
 				}
 			}
@@ -56,10 +57,11 @@ public class SolemnWarning : IEffectCard {
 				// Delete the monster cards from opponent's playing field
 				owner.TakeLifePointsDamage (2000);
 				owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
+				owner.GetPlayingField ().DestroyCard (this);
 
 
 			}
-			owner.GetPlayingField ().DestroyCard (this);
+		
 		}
 	}
 }

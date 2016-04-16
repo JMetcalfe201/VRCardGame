@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrapHole : IEffectCard
+public class TrapHole : IEffectCard  //destroy a monster card with attack greater than 1000 from opponent's playing field
 {
 
 	// Use this for initialization

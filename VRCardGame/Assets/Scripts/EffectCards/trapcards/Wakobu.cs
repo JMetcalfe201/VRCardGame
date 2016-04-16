@@ -25,13 +25,16 @@ public class Wakobu : IEffectCard {//a trap card to prevent opponent attack for 
 	}
 	public override bool CanActivate()
 	{
-		if (owner.gpManager.GetCurrentPhase==EGamePhase.BattlePhase)
-		{
-			return true;
+		int ownerIndex = (owner.IsFirstPlayer() ? 1 : 2);
+
+		// If the other played the card
+		if (ownerIndex != player) {
+			if (owner.gpManager.GetCurrentPhase == EGamePhase.BattlePhase) {
+				return true;
+			}
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
+
 	}
 }
