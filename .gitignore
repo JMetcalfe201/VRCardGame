@@ -54,3 +54,5 @@ VRCardGame/Library/shadercompiler-32bit-2.log
 VRCardGame/Assembly-CSharp.csproj
 
 VRCardGame/Assets/Scripts/EffectCards/trapcards/MirrorForce.cs.meta
+
+*.prefab
