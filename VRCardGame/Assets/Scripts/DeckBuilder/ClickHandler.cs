@@ -8,7 +8,7 @@ public class ClickHandler : MonoBehaviour
     public GameObject buttonPrefab;
     DeckInProgressScript deck;
 
-    int deckIncrementer = 30;
+    int deckIncrementer = 1;
     GameObject deckViewport;
     GameObject deckContent;
 
@@ -51,7 +51,7 @@ public class ClickHandler : MonoBehaviour
             RectTransform listItemRect = listItem.transform as RectTransform;
 
             listItemRect.SetParent(deckContent.transform as RectTransform);
-            listItemRect.anchoredPosition = new Vector2(0, (deckContent.transform as RectTransform).rect.height / 2 - (deck.cardList.Count * 30));
+            listItemRect.anchoredPosition = new Vector2(0, (deckContent.transform as RectTransform).rect.height / 2 - (deck.cardList.Count * (buttonPrefab.transform as RectTransform).rect.height));
         }
     }
 
@@ -72,7 +72,7 @@ public class ClickHandler : MonoBehaviour
             if (found)
             {
                 RectTransform gRekt = g.transform as RectTransform;
-                gRekt.anchoredPosition = new Vector2(0, (deckContent.transform as RectTransform).rect.height / 2 - (index * 30));
+                gRekt.anchoredPosition = new Vector2(0, (deckContent.transform as RectTransform).rect.height / 2 - ((buttonPrefab.transform as RectTransform).rect.height * index));
             }
             index++;
         }
