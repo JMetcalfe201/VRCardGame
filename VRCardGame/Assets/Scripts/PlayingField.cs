@@ -131,10 +131,14 @@ public class PlayingField : NetworkBehaviour
     [ClientRpc]
     private void RpcDestroyMonsterCard(int index)
     {
-        Destroy(monsterCards[index].GetComponent<ICard>()._3DmonsterModel);
-        Destroy(monsterCards[index]);
+        if (monsterCards[index] != null)
+        {
+            Destroy(monsterCards[index].GetComponent<ICard>()._3DmonsterModel);
+            Destroy(monsterCards[index]);
 
-        monsterCards[index] = null;
+            monsterCards[index] = null;
+        }
+        else { Debug.Log("Tried to destroy null card???"); }
     }
 
     [Server]
@@ -406,16 +410,53 @@ public class PlayingField : NetworkBehaviour
         return playerDeck;
     }
 
+    
+    public List<GameObject> getMonsterCards()
+    {
+        List<GameObject> monsters = new List<GameObject>();
+        for (int i = 0; i < 5; i++)
+        {
+            if(monsterCards[i] != null)
+            {
+                monsters.Add(monsterCards[i]);
+            }
+        }
+        return monsters;
+    }
+    /*
     public List<int> getMonsterIndices()
     {
         List<int> indices = new List<int>();
         for (int i = 0; i < 5; i++)
         {
-            if(monsterCards[i] != null)
+            if (monsterCards[i] != null)
             {
                 indices.Add(i);
             }
         }
         return indices;
+    }
+    */
+    public int getIndexByMonsterCard(GameObject monster)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (monsterCards[i] == monster)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void setMonstersCanAttack(bool boolParam)
+    {
+        for(int i=0; i<5; i++)
+        {
+            if (monsterCards[i])
+            {
+                monsterCards[i].GetComponent<MonsterCard>().canAttack = boolParam;
+            }
+        }
     }
 }

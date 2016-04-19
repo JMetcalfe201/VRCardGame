@@ -9,6 +9,7 @@ public class MonsterCard : ICard
 
     [SerializeField]
     public bool attackMode = false;
+    public bool canAttack = false;
 
 
     public void SetAttackMode()

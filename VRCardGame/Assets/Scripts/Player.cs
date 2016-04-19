@@ -28,11 +28,17 @@ public class Player : NetworkBehaviour
     public List<GameObject> hand;
     private Transform handLocation;
 
-    public int attackingCard;
+    //public int attackingCard;
+    private int attackingCardIndex;
+    private int attackeeCardIndex;
+    private GameObject attackingCardObject;
 
     public int selectionIndex;
     private bool vAxisInUse;
     private bool hAxisInUse;
+    public List<GameObject> selectionItems;
+    private bool showInfoFlag;
+    private bool attackingFlag;
 
     void Awake()
     {
@@ -42,6 +48,9 @@ public class Player : NetworkBehaviour
         hand = new List<GameObject>();
         vAxisInUse = false;
         hAxisInUse = false;
+        showInfoFlag = true;
+        selectionIndex = 0;
+        selectionItems = new List<GameObject>();
     }
 
     void Start()
@@ -55,7 +64,9 @@ public class Player : NetworkBehaviour
 
         lifepoints = 8000;
 
-        attackingCard = -1;
+        //attackingCard = -1;
+        attackingCardIndex = -1;
+        attackingCardObject = null;
 
         if (!isLocalPlayer)
         {
@@ -81,6 +92,10 @@ public class Player : NetworkBehaviour
             gpManager.p2 = this;
         }
         drawStartingHand();
+
+        loadHandIntoSelectionItems();
+
+        hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
     }
 
     [Command]
@@ -186,7 +201,7 @@ public class Player : NetworkBehaviour
             }
              */
         }
-
+        /*
         if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
         {
             if (attackingCard == -1)
@@ -249,152 +264,233 @@ public class Player : NetworkBehaviour
                 }
             }
         }
-        /*
-        if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
+        */
+
+        if (Input.GetButtonDown("Show Info"))
         {
-            if (Input.GetButtonDown("drawcard_test"))
+            if (showInfoFlag)
             {
-                Debug.Log(field);
-                Debug.Log(field.getDeck());
-                field.getDeck().print();
-                addCardToHand(field.getDeck().DrawTop());
-                CmdgpManagerAdvancePhase();
+                StartCoroutine(cardInfoPane.FadeIn());
+                showInfoFlag = false;
             }
+            else
+            {
+                StartCoroutine(cardInfoPane.FadeOut());
+                showInfoFlag = true;
+            }
+            Debug.Log("Show Info");
+        }
+
+        //float v = Input.GetAxisRaw("Menu Vertical");
+        float h = Input.GetAxisRaw("Menu Horizontal");
+
+        if (attackingFlag)
+        {
+            handleAttackInput(h);
+        }
+        else
+        {
+            handleHandInput(h);
+        }
+
+        /*
+        if ((v > 0.5 || v < -0.5) && !vAxisInUse)
+        {
+            if (v > 0)
+            {
+                Debug.Log("Up");
+            }
+            else
+            {
+                Debug.Log("Down");
+            }
+            vAxisInUse = true;
+        }
+        else if (v < 0.5 && v > -0.5)
+        {
+            vAxisInUse = false;
         }
         */
-        if (isPlayersTurn())
+
+
+    } // End handleInput()
+
+    private void handleAttackInput(float h)
+    {
+        // add code here to go back to attack selection when escape is pressed
+
+        if ((h > 0.5 || h < -0.5) && !hAxisInUse)
         {
-            float v = Input.GetAxisRaw("Menu Vertical");
-            float h = Input.GetAxisRaw("Menu Horizontal");
-
-            if ((h > 0.5 || h < -0.5) && !hAxisInUse)
+            if (selectionItems.Count != 0)
             {
-                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
+                if (h > 0)
                 {
-                    if (h > 0)
-                    {
-                        if (hand.Count != 0)
-                        {
-                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
-                            selectionIndex = (selectionIndex + 1) % hand.Count;
-                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
-
-                            if(hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
-                            {
-                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
-                            }
-                            else if(hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
-                            {
-                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
-                            }
-
-                        }
-                        else
-                            Debug.Log("No cards in hand");
-                    }
-                    else
-                    {
-                        if (hand.Count != 0)
-                        {
-                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
-                            selectionIndex = (selectionIndex - 1 + hand.Count) % hand.Count;
-                            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
-
-                            if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
-                            {
-                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
-                            }
-                            else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
-                            {
-                                cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
-                            }
-                        }
-                        else
-                            Debug.Log("No cards in hand");
-                    }
-                }
-                else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
-                {
-                    List<int> monsterIndices = field.getMonsterIndices();
-                    if (monsterIndices.Count > 0)
-                    {
-                        if (h > 0)
-                        {
-                            Debug.Log("There are monsters on field");
-                            // do stuff...
-                        }
-                        else
-                        {
-                            Debug.Log("There are monsters on field");
-                            // do stuff...
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("No monsters on field");
-                    }
-                }
-
-                Debug.Log("Selection Index: " + selectionIndex);
-                hAxisInUse = true;
-            }
-            else if (h < 0.5 && h > -0.5)
-            {
-                hAxisInUse = false;
-            }
-
-            if (Input.GetButtonDown("Select"))
-            {
-                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
-                {
-                    if (hand.Count != 0)
-                        playCard(selectionIndex);
-                    else
-                        Debug.Log("No cards in hand");
-
-                    CmdgpManagerAdvancePhase();
-                }
-                /*
-                else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
-                {
-                    attackingCard = selectionIndex;
-                    field.Attack(attackingCard, insert_index_to_attack_here);
-                }
-                */
-            }
-
-            if ((v > 0.5 || v < -0.5) && !vAxisInUse)
-            {
-                if (v > 0)
-                {
-
-                    Debug.Log("Up");
+                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        selectionIndex = (selectionIndex + 1) % selectionItems.Count;
+                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+                        
                 }
                 else
                 {
-
-                    Debug.Log("Down");
+                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        selectionIndex = (selectionIndex - 1) % selectionItems.Count;
+                        if (selectionIndex < 0) { selectionIndex += selectionItems.Count; }
+                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+                    
                 }
 
-                vAxisInUse = true;
+                updateCardInfoPane();
             }
-            else if (v < 0.5 && v > -0.5)
-            {
-                vAxisInUse = false;
-            }
+
+            Debug.Log("Selection Index: " + selectionIndex);
+            hAxisInUse = true;
+        }
+        else if (h < 0.5 && h > -0.5)
+        {
+            hAxisInUse = false;
         }
 
-    } // End handleInput()
+        if (Input.GetButtonDown("Select"))
+        {
+            GameObject attackingMonster = field.GetCardByIndex(1, attackingCardIndex);
+            attackingMonster.GetComponent<MonsterCard>().canAttack = false;
+            if (selectionItems.Count != 0)
+            {
+                attackeeCardIndex = field.GetOpposingPlayingField().getIndexByMonsterCard(selectionItems[selectionIndex]);
+                field.Attack(attackingCardIndex, attackeeCardIndex);
+            }
+            else
+            {
+                field.GetOpposingPlayingField().player.TakeLifePointsDamage(attackingMonster.GetComponent<MonsterCard>().attack);
+            }
+            loadMonstersIntoSelectionItems();
+            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+            attackingFlag = false;
+        }
+    }
+
+    private void handleHandInput(float h)
+    {
+        if (playerNumber != 1 || (playerNumber == 1 && (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)))
+            { h *= -1; }
+        if ((h > 0.5 || h < -0.5) && !hAxisInUse)
+        {
+            if (h > 0)
+            {
+                if (selectionItems.Count != 0)
+                {
+                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                    selectionIndex = (selectionIndex + 1) % selectionItems.Count;
+                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                    updateCardInfoPane();
+
+                }
+                else
+                    Debug.Log("No cards in hand");
+            }
+            else
+            {
+                if (selectionItems.Count != 0)
+                {
+                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                    selectionIndex = (selectionIndex - 1) % selectionItems.Count;
+                    if (selectionIndex < 0) { selectionIndex += selectionItems.Count; }
+                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                    updateCardInfoPane();
+                }
+                else
+                    Debug.Log("No cards in hand");
+            }
+
+            Debug.Log("Selection Index: " + selectionIndex);
+            hAxisInUse = true;
+        }
+        else if (h < 0.5 && h > -0.5)
+        {
+            hAxisInUse = false;
+        }
+
+        if (Input.GetButtonDown("Select"))
+        {
+            if ((gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2) && isPlayersTurn())
+            {
+                if (selectionItems.Count != 0)
+                {
+                    StartCoroutine(cardInfoPane.FadeOut());
+                    showInfoFlag = true;
+                    playCard(selectionIndex);
+                    selectionIndex = 0;
+                    if (selectionItems[0] != null)
+                    {
+                        selectionItems[0].GetComponent<ParticleSystem>().enableEmission = true;
+                        updateCardInfoPane();
+                    }
+                    Debug.Log("Play Card");
+                }
+                else { Debug.Log("No cards in hand"); }
+
+                CmdgpManagerAdvancePhase();
+            }
+            else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
+            {
+                if (selectionItems.Count > 0)
+                {
+                    attackingCardObject = selectionItems[selectionIndex];
+                    if (attackingCardObject.GetComponent<MonsterCard>().canAttack)
+                    {
+                        attackingFlag = true; // move on to selecting enemy monster to attack
+                        attackingCardIndex = field.getIndexByMonsterCard(attackingCardObject);
+                        loadAttackeeMonstersIntoSelectionItems();
+                        Debug.Log("Chose Attacking Card " + attackingCardObject.GetComponent<MonsterCard>().cardName);
+                    }
+                    else
+                    {
+                        Debug.Log("That monster can't attack yet");
+                    }
+                }
+                else
+                {
+                    Debug.Log("No monster to select");
+                }
+            }
+        }
+    }
 
     private void OnPhaseChanged(int player, EGamePhase phase)
     {
         if (phase == EGamePhase.MainPhase1 && player == playerNumber)
         {
             addCardToHand(field.getDeck().DrawTop());
-
-            StartCoroutine(cardInfoPane.FadeIn());
+            loadHandIntoSelectionItems();
+            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+            // Removed, press "Show Info" to display info pane now
+            //StartCoroutine(cardInfoPane.FadeIn());
+        }
+        else if (phase == EGamePhase.BattlePhase && player == playerNumber)
+        {
+            loadMonstersIntoSelectionItems();
+            if(selectionItems.Count > 0)
+            {
+                selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+            }
+        }
+        else if (phase == EGamePhase.MainPhase2 && player == playerNumber)
+        {
+            loadHandIntoSelectionItems();
+            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+            attackingFlag = false;
+        }
+        else if(phase == EGamePhase.EndPhase)
+        {
+            field.setMonstersCanAttack(true);
         }
 
+
+
+        // Removed so that card info display may be accessed at any time
+        /*
         if((phase == EGamePhase.MainPhase1 || phase == EGamePhase.MainPhase2) && player == playerNumber)
         {
             selectionIndex = 0;
@@ -421,6 +517,7 @@ public class Player : NetworkBehaviour
         {
             StartCoroutine(cardInfoPane.FadeOut());
         }
+        */
     }
 
     //CmdAddCard
@@ -507,11 +604,9 @@ public class Player : NetworkBehaviour
 
         GameObject cardToDestroy = hand[cardIndex];
         hand.RemoveAt(cardIndex);
+        selectionItems.RemoveAt(cardIndex);
         Destroy(cardToDestroy);
-        if (hand.Count > cardIndex)
-        {
-            fixHandCardPositions(cardIndex);
-        }
+        if (hand.Count > cardIndex) { fixHandCardPositions(cardIndex); }
     }
 
     private void fixHandCardPositions(int startIndex)
@@ -546,6 +641,75 @@ public class Player : NetworkBehaviour
         for (int i = 0; i < 4; i++)
         {
             addCardToHand(field.getDeck().DrawTop());
+        }
+    }
+
+    private void loadHandIntoSelectionItems()
+    {
+        emptySelectionItems();
+        if (hand.Count == 0) { Debug.Log("No cards in hand"); }
+        else
+        {
+            for(int i=0; i<hand.Count; i++)
+            {
+                selectionItems.Add(hand[i]);
+            }
+        }
+        selectionIndex = 0;
+        updateCardInfoPane();
+    }
+
+    private void loadMonstersIntoSelectionItems()
+    {
+        emptySelectionItems();
+        List<GameObject> monsters = field.getMonsterCards();
+        {
+            for(int i=0; i<monsters.Count; i++)
+            {
+                selectionItems.Add(monsters[i]);
+            }
+        }
+        selectionIndex = 0;
+        updateCardInfoPane();
+    }
+
+    private void emptySelectionItems()
+    {
+        while (selectionItems.Count != 0)
+        {
+            if (selectionItems[0] != null)
+            {
+                selectionItems[0].GetComponent<ParticleSystem>().enableEmission = false;
+            }
+            selectionItems.RemoveAt(0);
+        }
+    }
+
+    private void loadAttackeeMonstersIntoSelectionItems()
+    {
+        emptySelectionItems();
+        PlayingField oppField = field.GetOpposingPlayingField();
+        for(int i=0; i<5; i++)
+        {
+            GameObject monster = oppField.GetCardByIndex(1, i);
+            if (monster != null)
+            {
+                selectionItems.Add(monster);
+            }
+        }
+        selectionIndex = 0;
+        updateCardInfoPane();
+    }
+
+    private void updateCardInfoPane()
+    {
+        if (selectionItems[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
+        {
+            cardInfoPane.UpdateFields(selectionItems[selectionIndex].GetComponent<MonsterCard>());
+        }
+        else if (selectionItems[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
+        {
+            cardInfoPane.UpdateFields(selectionItems[selectionIndex].GetComponent<IEffectCard>());
         }
     }
 }
