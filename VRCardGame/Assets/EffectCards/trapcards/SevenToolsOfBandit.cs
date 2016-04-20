@@ -48,9 +48,12 @@ public class SevenToolsOfBandit : IEffectCard  //block a trap card and take 1000
 					if (card.cardtype == ECardType.TRAP_CARD) {
 						// Call block
 						card.Block ();//should destroy the trap card
-						owner.TakeLifePointsDamage (1000);
-						owner.GetPlayingField ().DestroyCard (this);
+						card.owner.TakeLifePointsDamage (1000);
+						card.owner.GetPlayingField ().CmdDestroyCard (card);
 					}
+
+                    owner.gpManager.EventCardPlaced -= CheckCardPlaced;
+                    owner.GetPlayingField().CmdDestroyCard(this);
 				}
 			}
 

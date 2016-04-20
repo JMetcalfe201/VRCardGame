@@ -39,12 +39,14 @@ public class TrapHole : IEffectCard  //destroy a monster card with attack greate
 			{
 				// Get the instance of the card from the oppenent's playingfield
 				MonsterCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<MonsterCard>();
+
 				if(card.attack>=1000){
 
 				// Delete the monster cards from opponent's playing field
-				
-					owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
-					owner.GetPlayingField ().DestroyCard (this);
+
+                    card.owner.GetPlayingField().CmdDestroyCard(card);
+                    owner.gpManager.EventCardPlaced -= CheckCardPlaced;
+					owner.GetPlayingField ().CmdDestroyCard (this);
 
 				}
 

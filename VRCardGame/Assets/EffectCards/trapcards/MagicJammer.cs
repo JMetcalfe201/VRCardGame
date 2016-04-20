@@ -7,7 +7,7 @@ public class MagicJammer : IEffectCard { //trap card discard one card in opponen
 	void Start () {
 	
 	}
-	
+	/*
 	// Update is called once per frame
 	void Update () {
 	
@@ -21,7 +21,7 @@ public class MagicJammer : IEffectCard { //trap card discard one card in opponen
 			//need to complete
 
 
-				owner.GetPlayingField ().DestroyCard (this);
+			owner.GetPlayingField ().DestroyCard (this);
 
 
 		}
@@ -33,7 +33,7 @@ public class MagicJammer : IEffectCard { //trap card discard one card in opponen
 
 		// If the other played the card
 		if (ownerIndex != player) {
-			if (owner.gpManager.GetCurrentPhase == EGamePhase.BattlePhase) {
+			if (owner.gpManager.GetCurrentPhase() == EGamePhase.BattlePhase) {
 				return true;
 			}
 		}
@@ -41,4 +41,5 @@ public class MagicJammer : IEffectCard { //trap card discard one card in opponen
 		return false;
 
 	}
+     */
 }

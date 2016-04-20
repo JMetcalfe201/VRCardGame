@@ -43,25 +43,26 @@ public class SolemnWarning : IEffectCard { //destroy a card placed from opponent
 				if (card.revealed)
 				{
 					// Call block
-					owner.TakeLifePointsDamage (2000);
+					card.owner.TakeLifePointsDamage (2000);
 					card.Block();
-					owner.GetPlayingField ().DestroyCard (this);
+					card.owner.GetPlayingField ().CmdDestroyCard (card);
 
 				}
 			}
 			else
 			{
 				// Get the instance of the card from the oppenent's playingfield
-				//MonsterCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<MonsterCard>();
+				MonsterCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<MonsterCard>();
 
 				// Delete the monster cards from opponent's playing field
-				owner.TakeLifePointsDamage (2000);
-				owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
-				owner.GetPlayingField ().DestroyCard (this);
+				card.owner.TakeLifePointsDamage (2000);
+				card.owner.GetPlayingField ().CmdDestroyCard (card);
 
 
 			}
-		
+
+            owner.gpManager.EventCardPlaced -= CheckCardPlaced;
+            owner.GetPlayingField().CmdDestroyCard(this);
 		}
 	}
 }

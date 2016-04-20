@@ -36,31 +36,21 @@ public class SolemnJudgement : IEffectCard {//destroy a placed card from opponen
 			// If it is an effect card. (row 0 is effect, row 1 is monster)
 			if (rowIndex == 0)
 			{
-				// Get the instance of the card from the opponent's playingfield
-				IEffectCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<IEffectCard>();
 
-				// If the card is revlead (activiated)
-				if (card.revealed)
-				{
-					// Call block
-					card.Block();
-					owner.TakeLifePointsDamage (owner.lifepoints / 2);
-					owner.GetPlayingField ().DestroyCard (this);
-				}
 			}
 			else
 			{
 				// Get the instance of the card from the oppenent's playingfield
-				//MonsterCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<MonsterCard>();
+				MonsterCard card = owner.GetPlayingField().GetOpposingPlayingField().GetCardByIndex(rowIndex, colIndex).GetComponent<MonsterCard>();
 
 				// Delete the monster cards from opponent's playing field
 
-					owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(colIndex);
-					owner.TakeLifePointsDamage (owner.lifepoints / 2);
-					owner.GetPlayingField ().DestroyCard (this);
+				card.owner.TakeLifePointsDamage (card.attack / 2);
+				card.owner.GetPlayingField ().CmdDestroyCard (card);
 
+                owner.gpManager.EventCardPlaced -= CheckCardPlaced;
+                owner.GetPlayingField().CmdDestroyCard(this);
 			}
-
 		}
 	}
 }

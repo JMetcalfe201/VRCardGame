@@ -17,7 +17,6 @@ public class justDesserts : IEffectCard {//a trap card dealing damage according 
 		base.Placed(onField);
 		if (onField == true) {
 
-			bool destroyed=false;
 			int col=0;
 			int cardCount = 0;
 			while (col < 5) {
@@ -28,23 +27,13 @@ public class justDesserts : IEffectCard {//a trap card dealing damage according 
 			}
 			if (cardCount!=0){
 						owner.GetPlayingField ().GetOpposingPlayingField ().player.TakeLifePointsDamage(500*cardCount);
-						owner.GetPlayingField ().DestroyCard (this);
+						owner.GetPlayingField ().CmdDestroyCard (this);
 			}
 		}
 
 	}
 	public override bool CanActivate()
 	{
-		int ownerIndex = (owner.IsFirstPlayer() ? 1 : 2);
-
-		// If the other played the card
-		if (ownerIndex != player) {
-			if (owner.gpManager.GetCurrentPhase == EGamePhase.BattlePhase) {
-				return true;
-			}
-		}
-
-		return false;
-
+        return owner.gpManager.GetCurrentPhase() == EGamePhase.BattlePhase;
 	}
 }

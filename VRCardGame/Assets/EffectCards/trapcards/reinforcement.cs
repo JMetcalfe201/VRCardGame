@@ -55,7 +55,7 @@ public class reinforcement : IEffectCard {//a trap card adding 500 atk to a mons
 				col++;
 			}
 			if (destroyed == true) {
-				owner.GetPlayingField ().DestroyCard (this);
+				owner.GetPlayingField ().CmdDestroyCard (this);
 			}
 
 		}
@@ -63,16 +63,6 @@ public class reinforcement : IEffectCard {//a trap card adding 500 atk to a mons
 	}
 	public override bool CanActivate()
 	{
-		int ownerIndex = (owner.IsFirstPlayer() ? 1 : 2);
-
-		// If the other played the card
-		if (ownerIndex != player) {
-			if (owner.gpManager.GetCurrentPhase == EGamePhase.BattlePhase) {
-				return true;
-			}
-		}
-
-		return false;
-
+        return owner.gpManager.GetCurrentPhase() == EGamePhase.BattlePhase;
 	}
 }

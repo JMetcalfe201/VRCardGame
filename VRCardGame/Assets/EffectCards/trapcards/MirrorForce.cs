@@ -16,9 +16,9 @@ public class MirrorForce : IEffectCard {//a trap card destroy a monster card fro
 	public override void Placed(bool onField)
 	{
 		base.Placed(onField);
+
 		if (onField == true) {
 
-			// Binds the function CheckCardPlaced to the event EventCardPlaced
 			bool destroyed=false;
 			int col=0;
 			while(destroyed==false&&col<5){
@@ -29,24 +29,14 @@ public class MirrorForce : IEffectCard {//a trap card destroy a monster card fro
 				col++;
 
 			}
-			if (destroyed == true) {
-				owner.GetPlayingField ().DestroyCard (this);
-			}
+
+			owner.GetPlayingField ().CmdDestroyCard (this);
 		}
 
 	}
 	public override bool CanActivate()
 	{
-		int ownerIndex = (owner.IsFirstPlayer() ? 1 : 2);
-
-		// If the other played the card
-		if (ownerIndex != player) {
-			if (owner.gpManager.GetCurrentPhase == EGamePhase.BattlePhase) {
-				return true;
-			}
-		}
-
-		return false;
-
+        // Check if the other player has a monster card to destroy
+        return owner.GetPlayingField().GetOpposingPlayingField().HasMonsterCards() && owner.gpManager.GetCurrentPhase() == EGamePhase.BattlePhase;
 	}
 }

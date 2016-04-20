@@ -77,6 +77,45 @@ public class PlayingField : NetworkBehaviour
         }
     }
 
+    public void CmdDestroyCard(ICard card)
+    {
+        if(card.cardtype == ECardType.MONSTER_CARD)
+        {
+            for(int i = 0; i < monsterCards.Length; i++)
+            {
+                if(card == monsterCards[i])
+                {
+                    DestroyMonsterCard(i);
+                    return;
+                }
+            }
+        }
+        else if(card.cardtype != ECardType.UNKNOWN)
+        {
+            for(int i = 0; i < effectCards.Length; i++)
+            {
+                if(card == effectCards[i])
+                {
+                    DestroyEffectCard(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    public bool HasMonsterCards()
+    {
+        for(int i = 0; i < monsterCards.Length; i++)
+        {
+            if(monsterCards[i] != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     [Command]
     private void CmdAttack(int myIndex, int opponentIndex)
