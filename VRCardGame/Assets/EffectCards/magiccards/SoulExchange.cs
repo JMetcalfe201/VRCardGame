@@ -20,13 +20,15 @@ public class SoulExchange : IEffectCard {//discard one card in hand and destroy 
 			int col = 0;
 			int increase = 0;
 			while (col < 5) {
-				MonsterCard opcard = owner.GetPlayingField ().GetOpposingPlayingField ().GetCardByIndex (1, col);
+				MonsterCard opcard = owner.GetPlayingField ().GetOpposingPlayingField ().GetCardByIndex (1, col).GetComponent<MonsterCard>();
 				if (opcard != null) {
 					owner.GetPlayingField().AddCard(opcard.cardID, true);//may need to be fixed, intend to put the card in my own playing field
 					owner.GetPlayingField ().GetOpposingPlayingField ().CmdForceDestroyMonsterCard (col);
-					col += 5;
+					// ???
+                    //col += 5;
 
 				}
+                col++;
 			}
 
 

@@ -54,7 +54,21 @@ public class Deck
     }
     public void addCardBottom(int c) { cards.Insert(0, c); }
     public void addCardTop(int c) { cards.Add(c); }
-    public 
+    public int drawFirstMonsterID()
+    {
+        for(int i=0; i<cards.Count; i++)
+        {
+            // IDs 0-9 indicate monster card
+            if(cards[i] < 10)
+            {
+                int cardID = cards[i];
+                cards.RemoveAt(i);
+                return cardID;
+            }
+        }
+        // no monster cards found
+        return -1;
+    }
     /*
     public ICard takeCard(string card_name)
     {

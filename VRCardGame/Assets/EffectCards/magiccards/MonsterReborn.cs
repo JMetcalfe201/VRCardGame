@@ -17,18 +17,20 @@ public class MonsterReborn : IEffectCard {//add one monster from player's gravey
 		base.Placed(onField);
 		if (onField == true) {
 
-			int monsterIndex = owner.GetPlayingField ().GetGraveYard ().DrawMonsterCard();
-			if (monsterIndex != -1) {
-				owner.GetPlayingField().AddCard(owner.GetPlayingField ().GetGraveYard ().GetCardIdByIndex(monsterIndex), true);
-				owner.GetPlayingField ().GetGraveYard ().removeByIndex (monsterIndex);
-			}
-
-
-
-			owner.GetPlayingField ().CmdDestroyCard (this);
-
-
+            if (owner.GetPlayingField().getMonsterCards().Count < 5)
+            {
+                int monsterIndex = owner.GetPlayingField().GetGraveYard().drawFirstMonsterID();  // also removes from graveyard
+                if (monsterIndex != -1)
+                {
+                    owner.GetPlayingField().AddCard(monsterIndex, true);
+                    owner.GetPlayingField().CmdDestroyCard(this);
+                }
+            }
+            else
+            {
+                // ADD USER PROMPT HERE
+                Debug.Log("Can't use card, field is full");
+            }
 		}
-
 	}
 }

@@ -294,6 +294,7 @@ public class PlayingField : NetworkBehaviour
 
             if(firstEmpty >= monsterCards.Length)
             {
+                Debug.Log("error: tried to add monster card to a full field");
                 return;
             }
 
@@ -351,6 +352,7 @@ public class PlayingField : NetworkBehaviour
 
             if (firstEmpty >= effectCards.Length)
             {
+                Debug.Log("error: tried to add effect card to full field");
                 return;
             }
 
