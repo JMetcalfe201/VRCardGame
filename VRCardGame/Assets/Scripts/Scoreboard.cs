@@ -14,8 +14,13 @@ public class Scoreboard : MonoBehaviour
     [SerializeField]
     List<GameObject> turnIndicator;
 
-	// Use this for initialization
-	void Start ()
+    public float maxSpeed;
+    public float accelDelta;
+    public float acceleration;
+    public bool accelFlag;
+
+    // Use this for initialization
+    void Start ()
     {
 	    foreach(TextMesh t in blueLifePoints)
         {
@@ -26,12 +31,43 @@ public class Scoreboard : MonoBehaviour
         {
             t.gameObject.GetComponent<Renderer>().material.color = Color.red;
         }
+
+        maxSpeed = 30;
+        accelDelta = 1;
+        acceleration = 1;
+        accelFlag = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        transform.Translate(0, acceleration * Time.deltaTime / 300, 0);
+        if (accelFlag)
+        {
+            if (acceleration > maxSpeed)
+            {
+                accelDelta *= -1;
+                maxSpeed *= -1;
+                accelFlag = false;
+            }
+            else
+            {
+                acceleration += accelDelta;
+            }
+        }
+        else
+        {
+            if (acceleration < maxSpeed)
+            {
+                accelDelta *= -1;
+                maxSpeed *= -1;
+                accelFlag = true;
+            }
+            else
+            {
+                acceleration += accelDelta;
+            }
+        }
+    }
 
     public void SetBlueLifePoints(int lp)
     {

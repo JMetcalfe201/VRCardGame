@@ -451,7 +451,19 @@ public class PlayingField : NetworkBehaviour
         return playerDeck;
     }
 
-    
+    public List<GameObject> getEffectCards()
+    {
+        List<GameObject> cards = new List<GameObject>();
+        for (int i = 0; i < 5; i++)
+        {
+            if (effectCards[i] != null)
+            {
+                cards.Add(effectCards[i]);
+            }
+        }
+        return cards;
+    }
+
     public List<GameObject> getMonsterCards()
     {
         List<GameObject> monsters = new List<GameObject>();
@@ -464,7 +476,7 @@ public class PlayingField : NetworkBehaviour
         }
         return monsters;
     }
-    /*
+
     public List<int> getMonsterIndices()
     {
         List<int> indices = new List<int>();
@@ -477,7 +489,7 @@ public class PlayingField : NetworkBehaviour
         }
         return indices;
     }
-    */
+
     public int getIndexByMonsterCard(GameObject monster)
     {
         for (int i = 0; i < 5; i++)

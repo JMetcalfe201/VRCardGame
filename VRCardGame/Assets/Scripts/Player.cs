@@ -39,6 +39,7 @@ public class Player : NetworkBehaviour
     public List<GameObject> selectionItems;
     private bool showInfoFlag;
     private bool attackingFlag;
+    private enum selectedArea { handCards, monsterCards, effectCards };
 
     void Awake()
     {
@@ -214,7 +215,15 @@ public class Player : NetworkBehaviour
 
     private void handleAttackInput(float h)
     {
-        // add code here to go back to attack selection when escape is pressed
+        if (playerNumber == 1)
+        {
+            h *= -1;
+        }
+        if (Input.GetButtonDown("Back"))
+        {
+            attackingFlag = false;
+            loadMonstersIntoSelectionItems();
+        }
 
         if ((h > 0.5 || h < -0.5) && !hAxisInUse)
         {
@@ -312,20 +321,20 @@ public class Player : NetworkBehaviour
             {
                 if (selectionItems.Count != 0)
                 {
-                    StartCoroutine(cardInfoPane.FadeOut());
-                    showInfoFlag = true;
-                    playCard(selectionIndex);
-                    selectionIndex = 0;
-                    if (selectionItems[0] != null)
+                    if (field.getMonsterCards().Count < 5)
                     {
-                        selectionItems[0].GetComponent<ParticleSystem>().enableEmission = true;
-                        updateCardInfoPane();
+                        playCard(selectionIndex);
+                        selectionIndex = 0;
+                        Debug.Log("Play Card");
+                        CmdgpManagerAdvancePhase();
                     }
-                    Debug.Log("Play Card");
+                    else
+                    {
+                        Debug.Log("Can't play card, field is full");
+                    }
                 }
-                else { Debug.Log("No cards in hand"); }
+                else { Debug.Log("No cards in hand"); } 
 
-                CmdgpManagerAdvancePhase();
             }
             else if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase)
             {
@@ -380,8 +389,6 @@ public class Player : NetworkBehaviour
         {
             field.setMonstersCanAttack(true);
         }
-
-
 
         // Removed so that card info display may be accessed at any time
         /*
@@ -561,6 +568,20 @@ public class Player : NetworkBehaviour
             for(int i=0; i<monsters.Count; i++)
             {
                 selectionItems.Add(monsters[i]);
+            }
+        }
+        selectionIndex = 0;
+        updateCardInfoPane();
+    }
+
+    private void loadEffectCardsIntoSelectionItems()
+    {
+        emptySelectionItems();
+        List<GameObject> effectCards = field.getEffectCards();
+        {
+            for (int i = 0; i < effectCards.Count; i++)
+            {
+                selectionItems.Add(effectCards[i]);
             }
         }
         selectionIndex = 0;
