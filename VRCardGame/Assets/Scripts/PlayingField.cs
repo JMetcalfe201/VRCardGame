@@ -498,4 +498,9 @@ public class PlayingField : NetworkBehaviour
             }
         }
     }
+
+    public Deck GetGraveYard()
+    {
+        return graveyard;
+    }
 }

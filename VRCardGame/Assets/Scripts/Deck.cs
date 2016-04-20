@@ -54,7 +54,7 @@ public class Deck
     }
     public void addCardBottom(int c) { cards.Insert(0, c); }
     public void addCardTop(int c) { cards.Add(c); }
-
+    public 
     /*
     public ICard takeCard(string card_name)
     {

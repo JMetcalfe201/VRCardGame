@@ -161,110 +161,7 @@ public class Player : NetworkBehaviour
             {
                 CmdgpManagerAdvancePhase();
             }
-
-            //////////////////////
-            /// Moved this stuff to "OnPhaseChanged" event below. Because of the networking gpManager.GetCurrentPhase() might not be correct right after calling CmdgpManagerAdvancePhase() since it must update over the network. Using an event make sure it isnt called until after the update is done
-            /*
-            if ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer()))
-            {
-                if (gpManager.GetCurrentPhase() == EGamePhase.DrawPhase)
-                {
-                    addCardToHand(field.getDeck().DrawTop());
-                }
-                hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
-
-                CmdgpManagerAdvancePhase();
-
-                if (gpManager.GetCurrentPhase() == EGamePhase.MainPhase1 || gpManager.GetCurrentPhase() == EGamePhase.MainPhase2)
-                {
-                    if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
-                    {
-                        cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
-                    }
-                    else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
-                    {
-                        cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
-                    }
-                    cardInfoPane.TurnOn();
-
-                    selectionIndex = 0;
-                    if (hand[0] != null)
-                    {
-                        hand[0].GetComponent<ParticleSystem>().enableEmission = true;
-                    }
-                    else
-                    {
-                        // no cards in hand, player loses?
-                    }
-                }
-
-            }
-             */
         }
-        /*
-        if (gpManager.GetCurrentPhase() == EGamePhase.BattlePhase && ((gpManager.isPlayerOnesTurn() && IsFirstPlayer()) || (!gpManager.isPlayerOnesTurn() && !IsFirstPlayer())))
-        {
-            if (attackingCard == -1)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    attackingCard = 0;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    attackingCard = 1;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    attackingCard = 2;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha4))
-                {
-                    attackingCard = 3;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha5))
-                {
-                    attackingCard = 4;
-                }
-            }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    field.Attack(attackingCard, 0);
-                    attackingCard = -1;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    field.Attack(attackingCard, 1);
-                    attackingCard = -1;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    field.Attack(attackingCard, 2);
-                    attackingCard = -1;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha4))
-                {
-                    field.Attack(attackingCard, 3);
-                    attackingCard = -1;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha5))
-                {
-                    field.Attack(attackingCard, 4);
-                    attackingCard = -1;
-                }
-            }
-        }
-        */
 
         if (Input.GetButtonDown("Show Info"))
         {
@@ -325,20 +222,17 @@ public class Player : NetworkBehaviour
             {
                 if (h > 0)
                 {
-                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
                         selectionIndex = (selectionIndex + 1) % selectionItems.Count;
-                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
-                        
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
                 }
                 else
                 {
-                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
                         selectionIndex = (selectionIndex - 1) % selectionItems.Count;
                         if (selectionIndex < 0) { selectionIndex += selectionItems.Count; }
-                        //selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
-                    
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
                 }
-
                 updateCardInfoPane();
             }
 
@@ -588,7 +482,7 @@ public class Player : NetworkBehaviour
         InitHand();
     }
 
-    private void addCardToHand(int card_id)
+    public void addCardToHand(int card_id)
     {
         GameObject theCard = GameObject.Find("CardDictionary").GetComponent<CardDictionary>().GetPrefabByID(card_id);
         theCard = Instantiate(theCard, handLocation.position, handLocation.rotation) as GameObject;
@@ -699,6 +593,10 @@ public class Player : NetworkBehaviour
         }
         selectionIndex = 0;
         updateCardInfoPane();
+        if(selectionItems.Count > 0)
+        {
+            selectionItems[0].GetComponent<ParticleSystem>().enableEmission = true;
+        }
     }
 
     private void updateCardInfoPane()
