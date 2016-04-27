@@ -15,7 +15,7 @@ public class PlaceHolderMenuSystem : MonoBehaviour
     void Start()
     {
         vAxisInUse = false;
-        hAxisInUse = true;
+        hAxisInUse = false;
 
         if (menuItems.Count > 0)
         {
@@ -33,18 +33,17 @@ public class PlaceHolderMenuSystem : MonoBehaviour
     private void HandleInput()
     {
         float v = Input.GetAxisRaw("Menu Vertical");
+        float h = Input.GetAxisRaw("Menu Horizontal");
 
         if ((v > 0.5 || v < -0.5) && !vAxisInUse )
         {
             if (v > 0)
             {
                 PreviousSelection();
-                Debug.Log("Up");
             }
             else
             {
                 NextSelection();
-                Debug.Log("Down");
             }
 
             vAxisInUse = true;
@@ -52,6 +51,24 @@ public class PlaceHolderMenuSystem : MonoBehaviour
         else if (v < 0.5 && v > -0.5)
         {
             vAxisInUse = false;
+        }
+
+        if ((h > 0.5 || h < -0.5) && !hAxisInUse)
+        {
+            if (h > 0)
+            {
+                menuItems[selectedIndex].GetComponent<PHMenuItem>().Right();
+            }
+            else
+            {
+                menuItems[selectedIndex].GetComponent<PHMenuItem>().Left();
+            }
+
+            hAxisInUse = true;
+        }
+        else if (h < 0.5 && h > -0.5)
+        {
+            hAxisInUse = false;
         }
 
         if (Input.GetButtonDown("Menu Accept"))

@@ -37,13 +37,6 @@ public class PlayingField : NetworkBehaviour
 
         playerDeck = new Deck();
         graveyard = new Deck();
-
-        // add some sort of load deck contents by integer
-        for (int i = 0; i < 15; i++)
-        {
-            playerDeck.addCardTop(Random.Range(0, CardDictionary.singleton.cardList.Count));
-        }
-        playerDeck.Shuffle();
     }
 
     public void InitPlayingField()
@@ -60,6 +53,12 @@ public class PlayingField : NetworkBehaviour
         {
             friendlyCardSpawnLocation = GameObject.Find("_" + (player.IsFirstPlayer() ? "P2" : "P1") + "_enemyCardsGrid").GetComponent<TransformGrid>();
         }
+
+        for (int i = 0; i < player.gpManager.nwManager.GetComponent<NetworkMenuRelay>().loadedDeck.Length; i++)
+        {
+            playerDeck.addCardTop(player.gpManager.nwManager.GetComponent<NetworkMenuRelay>().loadedDeck[i]);
+        }
+        playerDeck.Shuffle();
     }
 
     public void Attack(int myIndex, int opponentIndex)

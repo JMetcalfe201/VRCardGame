@@ -231,16 +231,24 @@ public class Player : NetworkBehaviour
             {
                 if (h > 0)
                 {
-                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        if(isLocalPlayer)
+                            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+
                         selectionIndex = (selectionIndex + 1) % selectionItems.Count;
-                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                        if (isLocalPlayer)
+                            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
                 }
                 else
                 {
-                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                        if (isLocalPlayer)
+                            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+
                         selectionIndex = (selectionIndex - 1) % selectionItems.Count;
                         if (selectionIndex < 0) { selectionIndex += selectionItems.Count; }
-                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                        if (isLocalPlayer)
+                            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
                 }
                 updateCardInfoPane();
             }
@@ -256,7 +264,10 @@ public class Player : NetworkBehaviour
         if (Input.GetButtonDown("Select"))
         {
             GameObject attackingMonster = field.GetCardByIndex(1, attackingCardIndex);
-            attackingMonster.GetComponent<MonsterCard>().canAttack = false;
+
+            if (isLocalPlayer)
+                attackingMonster.GetComponent<MonsterCard>().canAttack = false;
+
             if (selectionItems.Count != 0)
             {
                 attackeeCardIndex = field.GetOpposingPlayingField().getIndexByMonsterCard(selectionItems[selectionIndex]);
@@ -267,7 +278,10 @@ public class Player : NetworkBehaviour
                 field.GetOpposingPlayingField().player.TakeLifePointsDamage(attackingMonster.GetComponent<MonsterCard>().attack);
             }
             loadMonstersIntoSelectionItems();
-            selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+            if (isLocalPlayer)
+                selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
             attackingFlag = false;
         }
     }
@@ -282,9 +296,13 @@ public class Player : NetworkBehaviour
             {
                 if (selectionItems.Count != 0)
                 {
-                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                    if (isLocalPlayer)
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+
                     selectionIndex = (selectionIndex + 1) % selectionItems.Count;
-                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                    if (isLocalPlayer)
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
 
                     updateCardInfoPane();
 
@@ -296,10 +314,14 @@ public class Player : NetworkBehaviour
             {
                 if (selectionItems.Count != 0)
                 {
-                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+                    if (isLocalPlayer)
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = false;
+
                     selectionIndex = (selectionIndex - 1) % selectionItems.Count;
                     if (selectionIndex < 0) { selectionIndex += selectionItems.Count; }
-                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+                    if (isLocalPlayer)
+                        selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
 
                     updateCardInfoPane();
                 }
@@ -367,7 +389,9 @@ public class Player : NetworkBehaviour
         {
             addCardToHand(field.getDeck().DrawTop());
             loadHandIntoSelectionItems();
-            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+            if (isLocalPlayer)
+                hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
             // Removed, press "Show Info" to display info pane now
             //StartCoroutine(cardInfoPane.FadeIn());
         }
@@ -376,13 +400,17 @@ public class Player : NetworkBehaviour
             loadMonstersIntoSelectionItems();
             if(selectionItems.Count > 0)
             {
-                selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+                if (isLocalPlayer)
+                    selectionItems[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
             }
         }
         else if (phase == EGamePhase.MainPhase2 && player == playerNumber)
         {
             loadHandIntoSelectionItems();
-            hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
+            if (isLocalPlayer)
+                hand[selectionIndex].GetComponent<ParticleSystem>().enableEmission = true;
+
             attackingFlag = false;
         }
         else if(phase == EGamePhase.EndPhase)

@@ -25,6 +25,8 @@ public class GameplayManager : NetworkBehaviour
     [SyncVar]
     public int player_2_netID;
 
+    public NetworkManager nwManager;
+
     public Player p1;
     public Player p2;
 
@@ -45,6 +47,8 @@ public class GameplayManager : NetworkBehaviour
 
     void Awake()
     {
+        nwManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+
         player_1_netID = -1;
         player_2_netID = -1;
 
