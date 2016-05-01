@@ -343,11 +343,19 @@ public class Player : NetworkBehaviour
             {
                 if (selectionItems.Count != 0)
                 {
-                    if (field.getMonsterCards().Count < 5)
+                    if((selectionItems[selectionIndex].GetComponent<MagicCard>() || selectionItems[selectionIndex].GetComponent<TrapCard>()
+                        || selectionItems[selectionIndex].GetComponent<IEffectCard>()) && field.getEffectCards().Count < 5)
                     {
                         playCard(selectionIndex);
                         selectionIndex = 0;
-                        Debug.Log("Play Card");
+                        Debug.Log("Play effect card");
+                        CmdgpManagerAdvancePhase();
+                    }
+                    else if (selectionItems[selectionIndex].GetComponent<MonsterCard>() && field.getMonsterCards().Count < 5)
+                    {
+                        playCard(selectionIndex);
+                        selectionIndex = 0;
+                        Debug.Log("Play monster card");
                         CmdgpManagerAdvancePhase();
                     }
                     else
@@ -417,39 +425,7 @@ public class Player : NetworkBehaviour
         {
             field.setMonstersCanAttack(true);
         }
-
-        // Removed so that card info display may be accessed at any time
-        /*
-        if((phase == EGamePhase.MainPhase1 || phase == EGamePhase.MainPhase2) && player == playerNumber)
-        {
-            selectionIndex = 0;
-            if (hand[0] != null)
-            {
-                hand[0].GetComponent<ParticleSystem>().enableEmission = true;
-
-                if (hand[selectionIndex].GetComponent<ICard>().cardtype == ECardType.MONSTER_CARD)
-                {
-                    cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<MonsterCard>());
-                }
-                else if (hand[selectionIndex].GetComponent<ICard>().cardtype != ECardType.UNKNOWN)
-                {
-                    cardInfoPane.UpdateFields(hand[selectionIndex].GetComponent<IEffectCard>());
-                }
-            }
-            else
-            {
-                // no cards in hand, player loses?
-            }
-        }
-
-        if (phase == EGamePhase.EndPhase && ((player == 1 && IsFirstPlayer()) || (player != 1 && !IsFirstPlayer())))
-        {
-            StartCoroutine(cardInfoPane.FadeOut());
-        }
-        */
     }
-
-    //CmdAddCard
 
     [Command]
     public void CmdgpManagerAdvancePhase()
@@ -529,7 +505,14 @@ public class Player : NetworkBehaviour
 
     private void playCard(int cardIndex)
     {
-        field.AddCard(hand[cardIndex].GetComponent<MonsterCard>().cardID, true);
+        if (hand[cardIndex].GetComponent<MonsterCard>())
+        {
+            field.AddCard(hand[cardIndex].GetComponent<MonsterCard>().cardID, true);
+        }
+        if (hand[cardIndex].GetComponent<IEffectCard>())
+        {
+            field.AddCard(hand[cardIndex].GetComponent<IEffectCard>().cardID, true);
+        }
 
         GameObject cardToDestroy = hand[cardIndex];
         hand.RemoveAt(cardIndex);

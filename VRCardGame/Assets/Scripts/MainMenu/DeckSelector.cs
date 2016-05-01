@@ -44,7 +44,7 @@ public class DeckSelector : MonoBehaviour
         {
             selectedIndex = 0;
         }
-
+        mesh.text = "< " + Path.GetFileNameWithoutExtension(decks[selectedIndex].Name) + " >";
         relay.deckpath = decks[selectedIndex].FullName;
     }
 
@@ -56,7 +56,7 @@ public class DeckSelector : MonoBehaviour
         {
             selectedIndex = decks.Length - 1;
         }
-
+        mesh.text = "< " + Path.GetFileNameWithoutExtension(decks[selectedIndex].Name) + " >";
         relay.deckpath = decks[selectedIndex].FullName;
     }
 

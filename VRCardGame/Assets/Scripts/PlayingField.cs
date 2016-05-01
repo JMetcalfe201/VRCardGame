@@ -387,6 +387,7 @@ public class PlayingField : NetworkBehaviour
             card.Reveal();
 
             // Activate Card's effect
+            card.Placed(true);
         }
     }
 
@@ -474,19 +475,6 @@ public class PlayingField : NetworkBehaviour
             }
         }
         return monsters;
-    }
-
-    public List<int> getMonsterIndices()
-    {
-        List<int> indices = new List<int>();
-        for (int i = 0; i < 5; i++)
-        {
-            if (monsterCards[i] != null)
-            {
-                indices.Add(i);
-            }
-        }
-        return indices;
     }
 
     public int getIndexByMonsterCard(GameObject monster)
