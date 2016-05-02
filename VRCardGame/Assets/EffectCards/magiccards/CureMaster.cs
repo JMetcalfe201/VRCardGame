@@ -19,10 +19,6 @@ public class CureMaster : IEffectCard {//discard one card in hand and destroy al
 
 
 			owner.TakeLifePointsDamage (-1000);
-            for (int i = 0; i < 5; i++)
-            {
-                owner.GetPlayingField().GetOpposingPlayingField().CmdForceDestroyMonsterCard(i);
-            }
 
             owner.GetPlayingField ().CmdDestroyCard (this);
 
